@@ -8,14 +8,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cohousing.WebSite.RestApi.Controllers
 {
-    [Route("api/dining")]
+    [Route("api/commonmeal")]
     [ApiController]
-    public class DiningController : ControllerBase
+    public class CommonMealController : ControllerBase
     {
         private readonly ITimeProvider _timeProvider;
         private readonly ITimeFormatter _timeFormatter;
 
-        public DiningController(ITimeProvider timeProvider, ITimeFormatter timeFormatter)
+        public CommonMealController(ITimeProvider timeProvider, ITimeFormatter timeFormatter)
         {
             _timeProvider = timeProvider;
             _timeFormatter = timeFormatter;
@@ -23,7 +23,7 @@ namespace Cohousing.WebSite.RestApi.Controllers
 
         // GET api/values
         [HttpGet]
-        public ActionResult<DiningViewModel> Get(DateTime? dateUtc)
+        public ActionResult<CommonMealViewModel> Get(DateTime? dateUtc)
         {
             dateUtc = dateUtc ?? _timeProvider.Now;
 
@@ -32,31 +32,31 @@ namespace Cohousing.WebSite.RestApi.Controllers
                 .Select(x => dateUtc.Value.AddDays(x))
                 .ToList();
 
-            var result = new DiningViewModel
+            var result = new CommonMealViewModel
             {
-                DinningDays = dates.Select(d => CreateDiningDay(d, _timeFormatter)).ToList()
+                DinningDays = dates.Select(d => CreateMealDay(d, _timeFormatter)).ToList()
             };
 
             return result;
         }
 
-        private static DiningDayViewModel CreateDiningDay(DateTime date, ITimeFormatter timeFormatter)
+        private static CommonMealDayViewModel CreateMealDay(DateTime date, ITimeFormatter timeFormatter)
         {
-            return new DiningDayViewModel
+            return new CommonMealDayViewModel
             {
                 Id = "1",
                 Date = date,
                 DateName = timeFormatter.GetDateName(date),
                 DayName = timeFormatter.GetDayName(date).ToUpperFirstLetter(),
-                Persons = new List<DiningPersonViewModel>
+                Persons = new List<CommonMealPersonViewModel>
                 {
-                    new DiningPersonViewModel
+                    new CommonMealPersonViewModel
                     {
                         Id = "1",
                         Attending = true,
                         Name = "Jonas"
                     },
-                    new DiningPersonViewModel
+                    new CommonMealPersonViewModel
                     {
                         Id = "2",
                         Attending = false,
