@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace Cohousing.WebSite.RestApi.ViewModels
+namespace Cohousing.Server.RestApi.ViewModels
 {
     public class CommonMealViewModel
     {
-        public IList<CommonMealDayViewModel> DinningDays { get; set; }
+        public IList<CommonMealDayViewModel> MealDays { get; set; }
     }
 }

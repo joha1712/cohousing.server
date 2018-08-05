@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cohousing.Common;
+using Cohousing.Server.RestApi.ViewModels;
 using Cohousing.WebSite.RestApi.Common;
-using Cohousing.WebSite.RestApi.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cohousing.WebSite.RestApi.Controllers
+namespace Cohousing.Server.RestApi.Controllers
 {
     [Route("api/commonmeal")]
     [ApiController]
@@ -34,7 +34,7 @@ namespace Cohousing.WebSite.RestApi.Controllers
 
             var result = new CommonMealViewModel
             {
-                DinningDays = dates.Select(d => CreateMealDay(d, _timeFormatter)).ToList()
+                MealDays = dates.Select(d => CreateMealDay(d, _timeFormatter)).ToList()
             };
 
             return result;
