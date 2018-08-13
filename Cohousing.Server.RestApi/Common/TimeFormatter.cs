@@ -1,7 +1,6 @@
 using System;
-using Cohousing.Common;
 
-namespace Cohousing.WebSite.RestApi.Common
+namespace Cohousing.Server.RestApi.Common
 {
     public class TimeFormatter : ITimeFormatter
     {

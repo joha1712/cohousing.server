@@ -5,7 +5,39 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cohousing.Server.RestApi", "Cohousing.Server.RestApi\Cohousing.Server.RestApi.csproj", "{4FDE673E-AC14-4660-9E3E-707A6611907D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cohousing.Common", "Cohousing.Common\Cohousing.Common.csproj", "{07B52F98-E3A8-4259-8166-14D1876B9A55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cohousing.Server.Util", "Cohousing.Server.Util\Cohousing.Server.Util.csproj", "{07B52F98-E3A8-4259-8166-14D1876B9A55}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2D67D9C7-47DB-4DF6-9FB8-508D45FDBAD8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Install", "Install", "{2527FC40-311B-4FF2-B3FB-83A1AFBB6985}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sql", "Sql", "{BC5DCAEC-DD09-4F05-B318-CEA486A11391}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dev", "Dev", "{CCE5CE4B-0616-4800-9A49-946547ADCFED}"
+	ProjectSection(SolutionItems) = preProject
+		Solution Items\Install\Sql\Dev\00 Setup Database.sql = Solution Items\Install\Sql\Dev\00 Setup Database.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tst", "Tst", "{9F068BF2-8970-4647-8B7F-DCE8DA282A53}"
+	ProjectSection(SolutionItems) = preProject
+		Solution Items\Install\Sql\Tst\00 Setup Database.sql = Solution Items\Install\Sql\Tst\00 Setup Database.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "All", "All", "{3A13E53C-3D0A-43F3-98CE-24BBBE70EFFE}"
+	ProjectSection(SolutionItems) = preProject
+		Solution Items\Install\Sql\All\01 Create Tables.sql = Solution Items\Install\Sql\All\01 Create Tables.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Prd", "Prd", "{6D8B4F52-574C-45E9-886C-6EFBE3FC6971}"
+	ProjectSection(SolutionItems) = preProject
+		Solution Items\Install\Sql\Prd\00 Setup Database.sql = Solution Items\Install\Sql\Prd\00 Setup Database.sql
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cohousing.Server.Model", "Cohousing.Server.Model\Cohousing.Server.Model.csproj", "{69C160A5-29E8-4C8C-9BE8-E26E446EEBE9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cohousing.Server.SqlRepository", "Cohousing.Server.SqlRepository\Cohousing.Server.SqlRepository.csproj", "{BE1A0140-6212-4079-8B7B-ED14FE059AA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cohousing.Server.Service", "Cohousing.Server.Service\Cohousing.Server.Service.csproj", "{A66E22EA-F668-44C1-834B-EB39919E0771}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,9 +58,35 @@ Global
 		{07B52F98-E3A8-4259-8166-14D1876B9A55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07B52F98-E3A8-4259-8166-14D1876B9A55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07B52F98-E3A8-4259-8166-14D1876B9A55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69C160A5-29E8-4C8C-9BE8-E26E446EEBE9}.Azure.tst|Any CPU.ActiveCfg = Debug|Any CPU
+		{69C160A5-29E8-4C8C-9BE8-E26E446EEBE9}.Azure.tst|Any CPU.Build.0 = Debug|Any CPU
+		{69C160A5-29E8-4C8C-9BE8-E26E446EEBE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69C160A5-29E8-4C8C-9BE8-E26E446EEBE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69C160A5-29E8-4C8C-9BE8-E26E446EEBE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69C160A5-29E8-4C8C-9BE8-E26E446EEBE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE1A0140-6212-4079-8B7B-ED14FE059AA5}.Azure.tst|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE1A0140-6212-4079-8B7B-ED14FE059AA5}.Azure.tst|Any CPU.Build.0 = Debug|Any CPU
+		{BE1A0140-6212-4079-8B7B-ED14FE059AA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE1A0140-6212-4079-8B7B-ED14FE059AA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE1A0140-6212-4079-8B7B-ED14FE059AA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE1A0140-6212-4079-8B7B-ED14FE059AA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A66E22EA-F668-44C1-834B-EB39919E0771}.Azure.tst|Any CPU.ActiveCfg = Debug|Any CPU
+		{A66E22EA-F668-44C1-834B-EB39919E0771}.Azure.tst|Any CPU.Build.0 = Debug|Any CPU
+		{A66E22EA-F668-44C1-834B-EB39919E0771}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A66E22EA-F668-44C1-834B-EB39919E0771}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A66E22EA-F668-44C1-834B-EB39919E0771}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A66E22EA-F668-44C1-834B-EB39919E0771}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2527FC40-311B-4FF2-B3FB-83A1AFBB6985} = {2D67D9C7-47DB-4DF6-9FB8-508D45FDBAD8}
+		{BC5DCAEC-DD09-4F05-B318-CEA486A11391} = {2527FC40-311B-4FF2-B3FB-83A1AFBB6985}
+		{CCE5CE4B-0616-4800-9A49-946547ADCFED} = {BC5DCAEC-DD09-4F05-B318-CEA486A11391}
+		{9F068BF2-8970-4647-8B7F-DCE8DA282A53} = {BC5DCAEC-DD09-4F05-B318-CEA486A11391}
+		{3A13E53C-3D0A-43F3-98CE-24BBBE70EFFE} = {BC5DCAEC-DD09-4F05-B318-CEA486A11391}
+		{6D8B4F52-574C-45E9-886C-6EFBE3FC6971} = {BC5DCAEC-DD09-4F05-B318-CEA486A11391}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2A4DDBDE-4A7C-4768-968D-4D02323ACE4E}

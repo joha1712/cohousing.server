@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using Cohousing.Common;
+using System.Threading.Tasks;
+using Cohousing.Server.RestApi.Common;
+using Cohousing.Server.RestApi.Mappers;
 using Cohousing.Server.RestApi.ViewModels;
-using Cohousing.WebSite.RestApi.Common;
+using Cohousing.Server.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cohousing.Server.RestApi.Controllers
@@ -13,57 +14,27 @@ namespace Cohousing.Server.RestApi.Controllers
     public class CommonMealController : ControllerBase
     {
         private readonly ITimeProvider _timeProvider;
-        private readonly ITimeFormatter _timeFormatter;
+        private readonly ICommonMealService _commonMealService;
+        private readonly ICommonMealMapper _commonMealMapper;
 
-        public CommonMealController(ITimeProvider timeProvider, ITimeFormatter timeFormatter)
+        public CommonMealController(ITimeProvider timeProvider, ICommonMealService commonMealService, ICommonMealMapper commonMealMapper)
         {
             _timeProvider = timeProvider;
-            _timeFormatter = timeFormatter;
+            _commonMealService = commonMealService;
+            _commonMealMapper = commonMealMapper;
         }
 
         // GET api/values
-        [HttpGet]
-        public ActionResult<CommonMealViewModel> Get(DateTime? dateUtc)
+        [HttpGet("list")]
+        public async Task<ActionResult<CommonMealViewModel[]>> List(DateTime? dateUtc = null, int? numDays = null)
         {
             dateUtc = dateUtc ?? _timeProvider.Now;
+            numDays = numDays ?? 5;
 
-            var dates = Enumerable
-                .Range(0, 6)
-                .Select(x => dateUtc.Value.AddDays(x))
-                .ToList();
+            var commonMeals = await _commonMealService.LoadOrCreate(dateUtc.Value, numDays.Value);
+            var result = _commonMealMapper.Map(commonMeals); 
 
-            var result = new CommonMealViewModel
-            {
-                MealDays = dates.Select(d => CreateMealDay(d, _timeFormatter)).ToList()
-            };
-
-            return result;
-        }
-
-        private static CommonMealDayViewModel CreateMealDay(DateTime date, ITimeFormatter timeFormatter)
-        {
-            return new CommonMealDayViewModel
-            {
-                Id = "1",
-                Date = date,
-                DateName = timeFormatter.GetDateName(date),
-                DayName = timeFormatter.GetDayName(date).ToUpperFirstLetter(),
-                Persons = new List<CommonMealPersonViewModel>
-                {
-                    new CommonMealPersonViewModel
-                    {
-                        Id = "1",
-                        Attending = true,
-                        Name = "Jonas"
-                    },
-                    new CommonMealPersonViewModel
-                    {
-                        Id = "2",
-                        Attending = false,
-                        Name = "Eva"
-                    }
-                }
-            };
+            return result.ToArray();
         }
     }
 }

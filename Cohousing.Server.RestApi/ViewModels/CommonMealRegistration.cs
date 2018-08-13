@@ -1,9 +1,10 @@
 ﻿namespace Cohousing.Server.RestApi.ViewModels
 {
-    public class CommonMealPersonViewModel
+    public class CommonMealRegistrationViewModel
     {
         public string Id { get; set; }
-        public string Name { get; set; }
+        public string PersonId { get; set; }
+        public string PersonName { get; set; }
         public bool Attending { get; set; }
     }
 }

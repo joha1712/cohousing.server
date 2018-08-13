@@ -2,7 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Configurations>Debug;Release;Azure.tst</Configurations>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Cohousing.Server.Model\Cohousing.Server.Model.csproj" />
+  </ItemGroup>
 
 </Project>
