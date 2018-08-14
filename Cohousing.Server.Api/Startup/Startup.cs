@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,8 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Cohousing.Server.Api.Startup
 {
@@ -31,9 +34,15 @@ namespace Cohousing.Server.Api.Startup
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSingleton<ILoggerFactory, LoggerFactory>(sp =>
+                new LoggerFactory(
+                    sp.GetRequiredService<IEnumerable<ILoggerProvider>>(),
+                    sp.GetRequiredService<IOptionsMonitor<LoggerFilterOptions>>()
+                    )
+                );
 
             // Setup DI Container
-            ApplicationContainer = AutofacConfig.BuildContainer(services);
+            ApplicationContainer = AutofacConfig.BuildContainer(services, Configuration);
 
             return new AutofacServiceProvider(ApplicationContainer);
         }
@@ -52,6 +61,7 @@ namespace Cohousing.Server.Api.Startup
 
             app.UseRequestLocalization();
             app.UseHttpsRedirection();
+
             app.UseMvc();
         }
     }

@@ -4,7 +4,10 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Features.ResolveAnything;
 using Cohousing.Server.Api.Common;
+using Cohousing.Server.SqlRepository;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Cohousing.Server.Api.Startup
 {
@@ -12,7 +15,7 @@ namespace Cohousing.Server.Api.Startup
     {
         public static IContainer Container { get; internal set; }
         
-        public static IContainer BuildContainer(IEnumerable<ServiceDescriptor> serviceDescriptors) 
+        public static IContainer BuildContainer(IEnumerable<ServiceDescriptor> serviceDescriptors, IConfiguration configuration) 
         {
             if (Container != null)
                 return Container;
@@ -20,7 +23,7 @@ namespace Cohousing.Server.Api.Startup
             var builder = new ContainerBuilder();
 
             AutoRegisterTypes(builder);
-            RegisterTypes(builder);
+            RegisterTypes(builder, configuration);
             AddConventions(builder);
 
             // Pupulate services descripters
@@ -30,11 +33,13 @@ namespace Cohousing.Server.Api.Startup
             return Container;
         }
 
-        private static void RegisterTypes(ContainerBuilder builder)
+        private static void RegisterTypes(ContainerBuilder builder, IConfiguration configuration)
         {
-            // Register explicit
+            // Custom registrations
+            builder.RegisterInstance(configuration).As<IConfiguration>();
             builder.RegisterType<TimeProvider>().As<ITimeProvider>().SingleInstance();
             builder.RegisterType<TimeFormatter>().As<ITimeFormatter>().SingleInstance();
+            builder.RegisterType<AppConfig>().As<ISqlRepositorySettings>().SingleInstance();
         }
 
         private static void AutoRegisterTypes(ContainerBuilder builder)
@@ -45,6 +50,7 @@ namespace Cohousing.Server.Api.Startup
                 Assembly.Load("Cohousing.Server.Service"),
                 Assembly.Load("Cohousing.Server.Model"),
                 Assembly.Load("Cohousing.Server.SqlRepository"),
+                Assembly.Load("Cohousing.Server.Api"),
             };
             builder.RegisterAssemblyTypes(assemblies).AsImplementedInterfaces();
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+
 using System.Collections.Immutable;
 using System.Data.SqlClient;
 using System.Linq;
@@ -27,10 +28,12 @@ namespace Cohousing.Server.SqlRepository
 
             using (var connection = new SqlConnection(_settings.ConnectionString))
             {
-                var commonMeal = await connection.QuerySingleAsync<CommonMeal>(query, new { Date = date });
-                var registrations = await GetCommonMealRegistrations(commonMeal.Id);
+                var commonMeal = await connection.QuerySingleOrDefaultAsync<CommonMeal>(query, new { Date = date });
 
-                commonMeal.Registrations = registrations;
+                if (commonMeal == null)
+                    return null;
+
+                commonMeal.Registrations = await GetCommonMealRegistrations(commonMeal.Id);
                 return commonMeal;
             }
         }
