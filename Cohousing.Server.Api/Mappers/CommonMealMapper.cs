@@ -1,10 +1,10 @@
 ﻿using System;
+using Cohousing.Server.Api.Common;
+using Cohousing.Server.Api.Mappers.Common;
+using Cohousing.Server.Api.ViewModels;
 using Cohousing.Server.Model.Models;
-using Cohousing.Server.RestApi.Common;
-using Cohousing.Server.RestApi.Mappers.Common;
-using Cohousing.Server.RestApi.ViewModels;
 
-namespace Cohousing.Server.RestApi.Mappers
+namespace Cohousing.Server.Api.Mappers
 {
     public class CommonMealMapper : MapperBase<CommonMeal, CommonMealViewModel>, ICommonMealMapper
     {

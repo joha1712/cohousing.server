@@ -1,7 +1,7 @@
 ﻿using System;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Cohousing.Server.RestApi.Common;
+using Cohousing.Server.Api.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Cohousing.Server.RestApi
+namespace Cohousing.Server.Api
 {
     public class Startup
     {

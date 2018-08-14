@@ -1,4 +1,4 @@
-﻿namespace Cohousing.Server.RestApi.ViewModels
+﻿namespace Cohousing.Server.Api.ViewModels
 {
     public class CommonMealRegistrationViewModel
     {

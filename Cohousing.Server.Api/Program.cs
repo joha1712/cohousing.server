@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Cohousing.Server.RestApi
+namespace Cohousing.Server.Api
 {
     public class Program
     {

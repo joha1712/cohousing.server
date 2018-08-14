@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Cohousing.Server.RestApi.Common;
-using Cohousing.Server.RestApi.Mappers;
-using Cohousing.Server.RestApi.ViewModels;
+using Cohousing.Server.Api.Common;
+using Cohousing.Server.Api.Mappers;
+using Cohousing.Server.Api.ViewModels;
 using Cohousing.Server.Service;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Cohousing.Server.RestApi.Controllers
+namespace Cohousing.Server.Api.Controllers
 {
     [Route("api/commonmeal")]
     [ApiController]

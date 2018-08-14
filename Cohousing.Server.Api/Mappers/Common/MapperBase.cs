@@ -2,7 +2,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace Cohousing.Server.RestApi.Mappers.Common
+namespace Cohousing.Server.Api.Mappers.Common
 {
     public abstract class MapperBase<T1, T2> : IMapper<T1, T2>
     {

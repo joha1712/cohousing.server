@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cohousing.Server.RestApi", "Cohousing.Server.RestApi\Cohousing.Server.RestApi.csproj", "{4FDE673E-AC14-4660-9E3E-707A6611907D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cohousing.Server.Api", "Cohousing.Server.Api\Cohousing.Server.Api.csproj", "{4FDE673E-AC14-4660-9E3E-707A6611907D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cohousing.Server.Util", "Cohousing.Server.Util\Cohousing.Server.Util.csproj", "{07B52F98-E3A8-4259-8166-14D1876B9A55}"
 EndProject
@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cohousing.Server.Model", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cohousing.Server.SqlRepository", "Cohousing.Server.SqlRepository\Cohousing.Server.SqlRepository.csproj", "{BE1A0140-6212-4079-8B7B-ED14FE059AA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cohousing.Server.Service", "Cohousing.Server.Service\Cohousing.Server.Service.csproj", "{A66E22EA-F668-44C1-834B-EB39919E0771}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cohousing.Server.Service", "Cohousing.Server.Service\Cohousing.Server.Service.csproj", "{A66E22EA-F668-44C1-834B-EB39919E0771}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

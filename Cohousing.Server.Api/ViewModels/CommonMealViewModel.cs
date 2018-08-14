@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace Cohousing.Server.RestApi.ViewModels
+namespace Cohousing.Server.Api.ViewModels
 {
     public class CommonMealViewModel
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 
-namespace Cohousing.Server.RestApi.Mappers.Common
+namespace Cohousing.Server.Api.Mappers.Common
 {
     public interface IMapper<T1, T2>
     {
