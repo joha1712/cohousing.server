@@ -16,7 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Cohousing.Server.Model\Cohousing.Server.Model.csproj" />
     <ProjectReference Include="..\Cohousing.Server.Service\Cohousing.Server.Service.csproj" />
+    <ProjectReference Include="..\Cohousing.Server.SqlRepository\Cohousing.Server.SqlRepository.csproj" />
     <ProjectReference Include="..\Cohousing.Server.Util\Cohousing.Server.Util.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,4 @@
-﻿namespace Cohousing.Server.Common
+﻿namespace Cohousing.Server.Util
 {
     public static class StringExtensions
     {

@@ -1,7 +1,6 @@
 ﻿using System;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Cohousing.Server.Api.Common;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
@@ -9,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Cohousing.Server.Api
+namespace Cohousing.Server.Api.Startup
 {
     public class Startup
     {
@@ -34,12 +33,7 @@ namespace Cohousing.Server.Api
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // Setup DI Container
-            var builder = new ContainerBuilder();
-            builder.RegisterType<TimeProvider>().As<ITimeProvider>().SingleInstance();
-            builder.RegisterType<TimeFormatter>().As<ITimeFormatter>().SingleInstance();
-
-            builder.Populate(services);
-            ApplicationContainer = builder.Build();
+            ApplicationContainer = AutofacConfig.BuildContainer(services);
 
             return new AutofacServiceProvider(ApplicationContainer);
         }
