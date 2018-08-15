@@ -1,6 +1,3 @@
-USE [mya.cohousing.sql.user.dev]
-GO
-
 SET ANSI_NULLS ON
 GO
 
@@ -11,7 +8,7 @@ GO
 CREATE TABLE [dbo].[Person](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[FirstName] [nvarchar](200) NOT NULL,
-	[LastName] [nvarchar](200) NOT NULL,
+	[LastName] [nvarchar](200) NULL,
 	[Active] [bit] NOT NULL,
  CONSTRAINT [PK_Person] PRIMARY KEY CLUSTERED 
 (
