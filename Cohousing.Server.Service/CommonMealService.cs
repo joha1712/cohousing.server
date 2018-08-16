@@ -20,14 +20,22 @@ namespace Cohousing.Server.Service
             _commonMealFactory = commonMealFactory;
         }
 
-        public async Task<IImmutableList<CommonMeal>> LoadOrCreate(DateTime date, int numDays)
+        public async Task<IImmutableList<CommonMeal>> LoadOrCreate(DateTime date, int numDays, TimeSpan mealTime)
         {
             var result = new List<CommonMeal>();
 
             foreach (var dayIdx in Enumerable.Range(0, numDays))
             {
-                var mealDate = date.AddDays(dayIdx);
-                var meal = await _commonMealRepository.GetByDate(mealDate) ?? await _commonMealFactory.Create(mealDate);
+                var mealDate = date.AddDays(dayIdx).Add(mealTime);
+
+                var meal = await _commonMealRepository.GetByDate(mealDate);
+
+
+                if (meal == null)
+                {
+                    meal = await _commonMealFactory.Create(mealDate);
+                    await _commonMealRepository.Add(meal);
+                }
 
                 result.Add(meal);
             }

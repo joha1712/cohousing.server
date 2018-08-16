@@ -99,19 +99,18 @@ namespace Cohousing.Server.SqlRepository
 
             using (var connection = new SqlConnection(_settings.ConnectionString))
             {
-                var ids = (await connection.QueryAsync<int>(query, registrations.Select(x => new
+                foreach (var registration in registrations)
                 {
-                    PersonId = x.PersonId,
-                    CommonMealId = commonMealId,
-                    Attending = x.Attending
-                })))
-                .ToArray();
+                    var id = await connection.QueryAsync<int>(query, new
+                    {
+                        PersonId = registration.PersonId,
+                        CommonMealId = commonMealId,
+                        Attending = registration.Attending
+                    });
 
-                for (var i = 0; i < registrations.Count; i++)
-                {
-                    registrations[i].Id = ids[i];
+                    registration.Id = id.Single();
                 }
-
+                
                 return registrations;
             }
         }

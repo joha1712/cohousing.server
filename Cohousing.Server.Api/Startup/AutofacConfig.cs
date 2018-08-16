@@ -39,7 +39,7 @@ namespace Cohousing.Server.Api.Startup
             builder.RegisterInstance(configuration).As<IConfiguration>();
             builder.RegisterType<TimeProvider>().As<ITimeProvider>().SingleInstance();
             builder.RegisterType<TimeFormatter>().As<ITimeFormatter>().SingleInstance();
-            builder.RegisterType<AppConfig>().As<ISqlRepositorySettings>().SingleInstance();
+            builder.RegisterType<AppSettings>().As<ISqlRepositorySettings>().SingleInstance();
         }
 
         private static void AutoRegisterTypes(ContainerBuilder builder)

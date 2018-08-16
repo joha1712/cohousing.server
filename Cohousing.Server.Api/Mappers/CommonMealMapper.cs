@@ -3,6 +3,7 @@ using Cohousing.Server.Api.Common;
 using Cohousing.Server.Api.Mappers.Common;
 using Cohousing.Server.Api.ViewModels;
 using Cohousing.Server.Model.Models;
+using Cohousing.Server.Util;
 
 namespace Cohousing.Server.Api.Mappers
 {
@@ -24,7 +25,7 @@ namespace Cohousing.Server.Api.Mappers
                 Id = item.Id + "",
                 Date = item.Date,
                 DateName = _timeFormatter.GetDateName(item.Date),
-                DayName = _timeFormatter.GetDayName(item.Date),
+                DayName = _timeFormatter.GetDayName(item.Date).ToUpperFirstLetter(),
                 Registrations = _registrationMapper.Map(item.Registrations)
             };
         }
