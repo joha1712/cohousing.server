@@ -9,9 +9,4 @@ namespace Cohousing.Server.Model.Repositories
     {
         Task<CommonMeal> GetByDate(DateTime date);
     }
-
-    public interface IComonMealRegistrationRepository : IRepository<CommonMealRegistration>
-    {
-        Task<IList<CommonMealRegistration>> GetByCommonMealId(int id);
-    }
 }

@@ -19,7 +19,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<Person> GetById(int id)
         {
-            const string query = " SELECT [Id] Id, [Active] Active, [FirstName] FirstName, [LastName] LastName " +
+            const string query = " SELECT [Id] Id, [Active] Active, [FirstName] FirstName, [LastName] LastName, [AddressId] AddressId " +
                                  " FROM Person " +
                                  " WHERE Id = @Id ";
 
@@ -31,7 +31,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<IImmutableList<Person>> GetAll()
         {
-            const string query = " SELECT [Id] Id, [Active] Active, [FirstName] FirstName, [LastName] LastName " +
+            const string query = " SELECT [Id] Id, [Active] Active, [FirstName] FirstName, [LastName] LastName, [AddressId] AddressId " +
                                  " FROM Person ";
 
             using (var connection = new SqlConnection(_settings.ConnectionString))
@@ -41,19 +41,19 @@ namespace Cohousing.Server.SqlRepository
             }
         }
 
-        public async Task<Person> Add(Person commonMeal)
+        public async Task<Person> Add(Person person)
         {
-            const string query = 
-                " INSERT INTO Person ([Active], [FirstName], [LastName]) " +
+            const string query =
+                " INSERT INTO Person ([Active], [FirstName], [LastName], [AddressId]) " +
                 " OUTPUT Inserted.Id " +
-                " VALUES (@Active, @FirstName, @LastName) ";
+                " VALUES (@Active, @FirstName, @LastName, @AddressId) ";
 
             using (var connection = new SqlConnection(_settings.ConnectionString))
             {
-                var result = await connection.QueryAsync<int>(query, new { Active = commonMeal.Active, FirstName = commonMeal.FirstName, LastName = commonMeal.LastName});
-                commonMeal.Id = result.SingleOrDefault();
+                var result = await connection.QueryAsync<int>(query, new { Active = person.Active, FirstName = person.FirstName, LastName = person.LastName, AddressId = person.AddressId});
+                person.Id = result.SingleOrDefault();
 
-                return commonMeal;
+                return person;
             }
         }
     }

@@ -6,5 +6,6 @@
         public string PersonId { get; set; }
         public string PersonName { get; set; }
         public bool Attending { get; set; }
+        public int RegNo { get; set; }
     }
 }

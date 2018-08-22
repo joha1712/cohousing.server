@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Cohousing.Server.Api.Common;
 using Cohousing.Server.Api.Mappers;
 using Cohousing.Server.Api.Startup;
 using Cohousing.Server.Api.ViewModels;
+using Cohousing.Server.Model.Repositories;
 using Cohousing.Server.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +20,7 @@ namespace Cohousing.Server.Api.Controllers
         private readonly ICommonMealService _commonMealService;
         private readonly ICommonMealMapper _commonMealMapper;
         private readonly ICommonMealSettings _commonMealSettings;
-
+        
         public CommonMealController(ITimeProvider timeProvider, ICommonMealService commonMealService, ICommonMealMapper commonMealMapper, ICommonMealSettings commonMealSettings)
         {
             _timeProvider = timeProvider;
@@ -35,7 +37,7 @@ namespace Cohousing.Server.Api.Controllers
             numDays = numDays ?? 5;
 
             var commonMeals = await _commonMealService.LoadOrCreate(dateOnly, numDays.Value, _commonMealSettings.MealTime);
-            var result = _commonMealMapper.Map(commonMeals); 
+            var result = _commonMealMapper.Map(commonMeals);
 
             return result.ToArray();
         }

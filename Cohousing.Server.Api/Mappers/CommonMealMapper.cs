@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Cohousing.Server.Api.Common;
 using Cohousing.Server.Api.Mappers.Common;
 using Cohousing.Server.Api.ViewModels;
@@ -10,34 +11,53 @@ namespace Cohousing.Server.Api.Mappers
     public class CommonMealMapper : MapperBase<CommonMeal, CommonMealViewModel>, ICommonMealMapper
     {
         private readonly ITimeFormatter _timeFormatter;
-        private readonly IMapper<CommonMealRegistration, CommonMealRegistrationViewModel> _registrationMapper;
+        private readonly ICommonMealRegistrationGroupFactory _registrationGroupFactory;
+        private readonly ICommonMealRegistrationMapper _commonMealRegistrationMapper;
 
-        public CommonMealMapper(ITimeFormatter timeFormatter, IMapper<CommonMealRegistration, CommonMealRegistrationViewModel> registrationMapper)
+        public CommonMealMapper(ITimeFormatter timeFormatter, ICommonMealRegistrationGroupFactory registrationGroupFactory, ICommonMealRegistrationMapper commonMealRegistrationMapper)
         {
             _timeFormatter = timeFormatter;
-            _registrationMapper = registrationMapper;
+            _registrationGroupFactory = registrationGroupFactory;
+            _commonMealRegistrationMapper = commonMealRegistrationMapper;
         }
 
         public override CommonMealViewModel Map(CommonMeal item)
         {
-            return new CommonMealViewModel
+            var registrations = _commonMealRegistrationMapper.Map(item.Registrations);
+
+            var result = new CommonMealViewModel
             {
                 Id = item.Id + "",
                 Date = item.Date,
                 DateName = _timeFormatter.GetDateName(item.Date),
                 DayName = _timeFormatter.GetDayName(item.Date).ToUpperFirstLetter(),
-                Registrations = _registrationMapper.Map(item.Registrations)
+                RegistrationGroups = _registrationGroupFactory.CreateGroups(registrations)
             };
+
+            CalcRegistrationNumber(result);
+
+            return result;
         }
-        
+
         public override CommonMeal Map(CommonMealViewModel item)
         {
+            var registrations = item.RegistrationGroups.SelectMany(x => x.Registrations);
+
             return new CommonMeal
             {
                 Id = Convert.ToInt32(item.Id),
                 Date = item.Date,
-                Registrations = _registrationMapper.Map(item.Registrations)
+                Registrations = _commonMealRegistrationMapper.Map(registrations)
             };
+        }
+
+        private static void CalcRegistrationNumber(CommonMealViewModel result)
+        {
+            var regNo = 1;
+            foreach (var reg in result.RegistrationGroups.SelectMany(x => x.Registrations))
+            {
+                reg.RegNo = regNo++;
+            }
         }
     }
 }
