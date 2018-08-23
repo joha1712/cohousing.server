@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Cohousing.Server.Api.Common;
 using Cohousing.Server.Api.Mappers;
 using Cohousing.Server.Api.Startup;
 using Cohousing.Server.Api.ViewModels;
-using Cohousing.Server.Model.Repositories;
 using Cohousing.Server.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,7 +28,7 @@ namespace Cohousing.Server.Api.Controllers
         }
 
         // GET api/values
-        [HttpGet("list")]
+        [HttpGet("commonmeals")]
         public async Task<ActionResult<CommonMealViewModel[]>> List(DateTime? mealDate = null, int? numDays = null)
         {
             var dateOnly = (mealDate ?? _timeProvider.Now).Date;

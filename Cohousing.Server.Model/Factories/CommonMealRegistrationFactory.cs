@@ -19,7 +19,7 @@ namespace Cohousing.Server.Model.Factories
             {
                 Id = -1,
                 Attending = false,
-                PersonId = person.Id
+                PersonId = person.Id,
             };
         }
     }

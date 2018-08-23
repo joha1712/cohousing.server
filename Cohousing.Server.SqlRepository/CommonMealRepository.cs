@@ -14,10 +14,12 @@ namespace Cohousing.Server.SqlRepository
     public class CommonMealRepository : ICommonMealRepository
     {
         private readonly ISqlRepositorySettings _settings;
-        
-        public CommonMealRepository(ISqlRepositorySettings settings)
+        private readonly ICommonMealRegistrationRepository _commonMealRegistrationRepository;
+
+        public CommonMealRepository(ISqlRepositorySettings settings, ICommonMealRegistrationRepository commonMealRegistrationRepository)
         {
             _settings = settings;
+            _commonMealRegistrationRepository = commonMealRegistrationRepository;
         }
 
         public async Task<CommonMeal> GetByDate(DateTime date)
@@ -33,7 +35,7 @@ namespace Cohousing.Server.SqlRepository
                 if (commonMeal == null)
                     return null;
 
-                commonMeal.Registrations = await GetCommonMealRegistrations(commonMeal.Id);
+                commonMeal.Registrations = await _commonMealRegistrationRepository.GetByCommonMealId(commonMeal.Id);
                 return commonMeal;
             }
         }
@@ -47,7 +49,7 @@ namespace Cohousing.Server.SqlRepository
             using (var connection = new SqlConnection(_settings.ConnectionString))
             {
                 var commonMeal = await connection.QuerySingleAsync<CommonMeal>(query, new { Id = id });
-                var registrations = await GetCommonMealRegistrations(commonMeal.Id);
+                var registrations = await _commonMealRegistrationRepository.GetByCommonMealId(commonMeal.Id);
 
                 commonMeal.Registrations = registrations;
                 return commonMeal;
@@ -84,49 +86,12 @@ namespace Cohousing.Server.SqlRepository
                 commonMeal.Id = output.SingleOrDefault();
 
                 // Add common meal registrations
-                commonMeal.Registrations = await AddCommonMealRegistrations(commonMeal.Registrations, commonMeal.Id);
+                commonMeal.Registrations = await _commonMealRegistrationRepository.Add(commonMeal.Registrations, commonMeal.Id);
 
                 return commonMeal;
             }
         }
 
-        private async Task<IImmutableList<CommonMealRegistration>> AddCommonMealRegistrations(IImmutableList<CommonMealRegistration> registrations, int commonMealId)
-        {
-            const string query =
-                " INSERT INTO CommonMealRegistration ([PersonId], [CommonMealId], [Attending]) " +
-                " OUTPUT Inserted.Id " +
-                " VALUES (@PersonId, @CommonMealId, @Attending) ";
-
-            using (var connection = new SqlConnection(_settings.ConnectionString))
-            {
-                foreach (var registration in registrations)
-                {
-                    var id = await connection.QueryAsync<int>(query, new
-                    {
-                        PersonId = registration.PersonId,
-                        CommonMealId = commonMealId,
-                        Attending = registration.Attending
-                    });
-
-                    registration.Id = id.Single();
-                }
-                
-                return registrations;
-            }
-        }
-
-        private async Task<IImmutableList<CommonMealRegistration>> GetCommonMealRegistrations(int commonMealId)
-        {
-            const string query = " SELECT [Id] Id, [Attending] Attending, [PersonId] PersonId " +
-                                 " FROM CommonMealRegistration " +
-                                 " WHERE CommonMealId = @CommonMealId ";
-
-            using (var connection = new SqlConnection(_settings.ConnectionString))
-            {
-                var registrations = await connection.QueryAsync<CommonMealRegistration>(query, new {CommonMealId = commonMealId});
-
-                return registrations.ToImmutableList();
-            }
-        }
+        
     }
 }

@@ -13,13 +13,11 @@ namespace Cohousing.Server.Service
     {
         private readonly ICommonMealRepository _commonMealRepository;
         private readonly CommonMealFactory _commonMealFactory;
-        private readonly IPersonRepository _personRepository;
-
-        public CommonMealService(ICommonMealRepository commonMealRepository, CommonMealFactory commonMealFactory, IPersonRepository personRepository)
+        
+        public CommonMealService(ICommonMealRepository commonMealRepository, CommonMealFactory commonMealFactory)
         {
             _commonMealRepository = commonMealRepository;
             _commonMealFactory = commonMealFactory;
-            _personRepository = personRepository;
         }
         
         public async Task<IImmutableList<CommonMeal>> LoadOrCreate(DateTime date, int numDays, TimeSpan mealTime)
