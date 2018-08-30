@@ -13,17 +13,19 @@ namespace Cohousing.Server.Api.Mappers
         private readonly ITimeFormatter _timeFormatter;
         private readonly ICommonMealRegistrationGroupFactory _registrationGroupFactory;
         private readonly ICommonMealRegistrationMapper _commonMealRegistrationMapper;
+        private readonly ICommonMealChefMapper _commonMealChefMapper;
 
-        public CommonMealMapper(ITimeFormatter timeFormatter, ICommonMealRegistrationGroupFactory registrationGroupFactory, ICommonMealRegistrationMapper commonMealRegistrationMapper)
+        public CommonMealMapper(ITimeFormatter timeFormatter, ICommonMealRegistrationGroupFactory registrationGroupFactory, ICommonMealRegistrationMapper commonMealRegistrationMapper, ICommonMealChefMapper commonMealChefMapper)
         {
             _timeFormatter = timeFormatter;
             _registrationGroupFactory = registrationGroupFactory;
             _commonMealRegistrationMapper = commonMealRegistrationMapper;
+            _commonMealChefMapper = commonMealChefMapper;
         }
 
         public override CommonMealViewModel Map(CommonMeal item)
         {
-            var registrations = _commonMealRegistrationMapper.Map(item.Registrations);
+            var registrations = _commonMealRegistrationMapper.MapMany(item.Registrations);
 
             var result = new CommonMealViewModel
             {
@@ -31,7 +33,8 @@ namespace Cohousing.Server.Api.Mappers
                 Date = item.Date,
                 DateName = _timeFormatter.GetDateName(item.Date),
                 DayName = _timeFormatter.GetDayName(item.Date).ToUpperFirstLetter(),
-                RegistrationGroups = _registrationGroupFactory.CreateGroups(registrations)
+                RegistrationGroups = _registrationGroupFactory.CreateGroups(registrations),
+                Chefs = _commonMealChefMapper.MapMany(item.Chefs)
             };
 
             CalcRegistrationNumber(result);
@@ -47,7 +50,7 @@ namespace Cohousing.Server.Api.Mappers
             {
                 Id = Convert.ToInt32(item.Id),
                 Date = item.Date,
-                Registrations = _commonMealRegistrationMapper.Map(registrations)
+                Registrations = _commonMealRegistrationMapper.MapMany(registrations)
             };
         }
 

@@ -44,6 +44,13 @@ CREATE TABLE [dbo].[CommonMeal](
 ) ON [PRIMARY]
 GO
 
+-- Create Index [IUK_CommonMeal_Date]
+CREATE UNIQUE NONCLUSTERED INDEX [IUK_CommonMeal_Date] ON [dbo].[CommonMeal]
+(
+	[Date] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+
 -- Create Table [dbo].[CommonMealRegistration]
 
 CREATE TABLE [dbo].[CommonMealRegistration](
@@ -77,6 +84,35 @@ GO
 
 ALTER TABLE [dbo].[Person]  WITH CHECK ADD  CONSTRAINT [FK_Person_Address] FOREIGN KEY([AddressId])
 REFERENCES [dbo].[Address] ([Id])
+GO
+
+CREATE TABLE [dbo].[CommonMealChef](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[PersonId] [int] NULL,
+	[CommonMealId] [int] NOT NULL,
+	[Timestamp] [datetime] NOT NULL,
+ CONSTRAINT [PK_CommonMealChef] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[CommonMealChef] ADD  CONSTRAINT [DF_CommonMealChef_Timestamp] DEFAULT (getdate()) FOR [Timestamp]
+GO
+
+ALTER TABLE [dbo].[CommonMealChef]  WITH CHECK ADD CONSTRAINT [FK_CommonMealChef_CommonMeal] FOREIGN KEY([CommonMealId])
+REFERENCES [dbo].[CommonMeal] ([Id])
+GO
+
+ALTER TABLE [dbo].[CommonMealChef] CHECK CONSTRAINT [FK_CommonMealChef_CommonMeal]
+GO
+
+ALTER TABLE [dbo].[CommonMealChef]  WITH CHECK ADD CONSTRAINT [FK_CommonMealChef_Person] FOREIGN KEY([PersonId])
+REFERENCES [dbo].[Person] ([Id])
+GO
+
+ALTER TABLE [dbo].[CommonMealChef] CHECK CONSTRAINT [FK_CommonMealChef_Person]
 GO
 
 

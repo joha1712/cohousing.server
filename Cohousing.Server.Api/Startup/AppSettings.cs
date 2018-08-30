@@ -15,11 +15,9 @@ namespace Cohousing.Server.Api.Startup
 
         public string ConnectionString => _configuration.GetSection("AppSettings:DbConnectionString").Value;
 
-        public TimeSpan MealTime => TimeSpan.Parse(_configuration.GetSection("AppSettings:CommonMealTime").Value);
-    }
-
-    public interface ICommonMealSettings
-    {
-        TimeSpan MealTime { get; }
+        public TimeSpan DefaultMealTime => TimeSpan.Parse(_configuration.GetSection("AppSettings:CommonMealDefaultTime").Value);
+        public int DefaultNumberOfChefs => Convert.ToInt32(_configuration.GetSection("AppSettings:CommonMealDefaultNumberOfChefs").Value);
+        public int DefaultDaysShown => Convert.ToInt32(_configuration.GetSection("AppSettings:CommonMealDefaultDaysShown").Value);
+        
     }
 }

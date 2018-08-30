@@ -7,6 +7,6 @@ namespace Cohousing.Server.Service
 {
     public interface ICommonMealService
     {
-        Task<IImmutableList<CommonMeal>> LoadOrCreate(DateTime date, int numDays, TimeSpan mealTime);
+        Task<IImmutableList<CommonMeal>> LoadOrCreate(DateTime date, int numDays, int numChefs, TimeSpan mealTime);
     }
 }

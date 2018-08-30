@@ -8,5 +8,6 @@ namespace Cohousing.Server.Model.Models
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public IImmutableList<CommonMealRegistration> Registrations { get; set; }
+        public IImmutableList<CommonMealChef> Chefs { get; set; }
     }
 }

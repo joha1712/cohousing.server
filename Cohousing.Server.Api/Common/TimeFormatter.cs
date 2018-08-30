@@ -1,4 +1,5 @@
 using System;
+using Cohousing.Server.Model.Common;
 
 namespace Cohousing.Server.Api.Common
 {

@@ -4,6 +4,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Features.ResolveAnything;
 using Cohousing.Server.Api.Common;
+using Cohousing.Server.Model.Common;
 using Cohousing.Server.SqlRepository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

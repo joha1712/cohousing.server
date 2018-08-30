@@ -9,14 +9,16 @@ namespace Cohousing.Server.Model.Factories
     {
         private readonly IPersonRepository _personRepository;
         private readonly CommonMealRegistrationFactory _commonMealRegistrationFactory;
+        private readonly CommonMealChefFactory _commonMealChefFactory;
 
-        public CommonMealFactory(IPersonRepository personRepository, CommonMealRegistrationFactory commonMealRegistrationFactory)
+        public CommonMealFactory(IPersonRepository personRepository, CommonMealRegistrationFactory commonMealRegistrationFactory, CommonMealChefFactory commonMealChefFactory)
         {
             _personRepository = personRepository;
             _commonMealRegistrationFactory = commonMealRegistrationFactory;
+            _commonMealChefFactory = commonMealChefFactory;
         }
         
-        public async Task<CommonMeal> Create(DateTime date)
+        public async Task<CommonMeal> Create(DateTime date, int numChefs)
         {
             var persons = await _personRepository.GetAll();
 
@@ -24,7 +26,8 @@ namespace Cohousing.Server.Model.Factories
             {
                 Id = -1,
                 Date = date,
-                Registrations = _commonMealRegistrationFactory.Create(persons)
+                Registrations = _commonMealRegistrationFactory.CreateMany(persons),
+                Chefs = _commonMealChefFactory.CreateMany(numChefs)
             };
         }
     }

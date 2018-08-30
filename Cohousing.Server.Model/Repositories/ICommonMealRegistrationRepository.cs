@@ -12,7 +12,7 @@ namespace Cohousing.Server.Model.Repositories
 
         Task<IImmutableList<CommonMealRegistration>> GetByCommonMealId(int commonMealId);
 
-        Task<IImmutableList<CommonMealRegistration>> Add(IImmutableList<CommonMealRegistration> registrations, int commonMealId);
+        Task<IImmutableList<CommonMealRegistration>> AddMany(IImmutableList<CommonMealRegistration> registrations, int commonMealId);
 
         Task<CommonMealRegistration> Update(CommonMealRegistration registration);
     }

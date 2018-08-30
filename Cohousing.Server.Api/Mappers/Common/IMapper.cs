@@ -8,7 +8,7 @@ namespace Cohousing.Server.Api.Mappers.Common
         T1 Map(T2 item);
         T2 Map(T1 item);
 
-        IImmutableList<T1> Map(IEnumerable<T2> items);
-        IImmutableList<T2> Map(IEnumerable<T1> items);
+        IImmutableList<T1> MapMany(IEnumerable<T2> items);
+        IImmutableList<T2> MapMany(IEnumerable<T1> items);
     }
 }

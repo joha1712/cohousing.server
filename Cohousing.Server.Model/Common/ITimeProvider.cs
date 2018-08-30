@@ -1,6 +1,6 @@
 using System;
 
-namespace Cohousing.Server.Api.Common
+namespace Cohousing.Server.Model.Common
 {
     public interface ITimeProvider
     {

@@ -7,7 +7,7 @@ namespace Cohousing.Server.Model.Factories
 {
     public class CommonMealRegistrationFactory
     {
-        public IImmutableList<CommonMealRegistration> Create(IEnumerable<Person> persons)
+        public IImmutableList<CommonMealRegistration> CreateMany(IEnumerable<Person> persons)
         {
             var registrations = persons.Select(Create);
             return registrations.ToImmutableList();

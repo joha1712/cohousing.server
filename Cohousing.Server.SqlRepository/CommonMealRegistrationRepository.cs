@@ -77,7 +77,7 @@ namespace Cohousing.Server.SqlRepository
             }
         }
 
-        public async Task<IImmutableList<CommonMealRegistration>> Add(IImmutableList<CommonMealRegistration> registrations, int commonMealId)
+        public async Task<IImmutableList<CommonMealRegistration>> AddMany(IImmutableList<CommonMealRegistration> registrations, int commonMealId)
         {
             foreach (var registration in registrations)
             {

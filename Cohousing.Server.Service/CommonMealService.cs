@@ -20,7 +20,7 @@ namespace Cohousing.Server.Service
             _commonMealFactory = commonMealFactory;
         }
         
-        public async Task<IImmutableList<CommonMeal>> LoadOrCreate(DateTime date, int numDays, TimeSpan mealTime)
+        public async Task<IImmutableList<CommonMeal>> LoadOrCreate(DateTime date, int numDays, int numChefs, TimeSpan mealTime)
         {
             var result = new List<CommonMeal>();
 
@@ -32,7 +32,7 @@ namespace Cohousing.Server.Service
 
                 if (meal == null)
                 {
-                    meal = await _commonMealFactory.Create(mealDate);
+                    meal = await _commonMealFactory.Create(mealDate, numChefs);
                     await _commonMealRepository.Add(meal);
                 }
 

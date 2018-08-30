@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Cohousing.Server.Model.Models;
 using Cohousing.Server.Model.Repositories;
 using Dapper;
+// ReSharper disable RedundantAnonymousTypePropertyName
 
 namespace Cohousing.Server.SqlRepository
 {

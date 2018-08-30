@@ -15,11 +15,13 @@ namespace Cohousing.Server.SqlRepository
     {
         private readonly ISqlRepositorySettings _settings;
         private readonly ICommonMealRegistrationRepository _commonMealRegistrationRepository;
+        private readonly ICommonMealChefRepository _commonMealChefRepository;
 
-        public CommonMealRepository(ISqlRepositorySettings settings, ICommonMealRegistrationRepository commonMealRegistrationRepository)
+        public CommonMealRepository(ISqlRepositorySettings settings, ICommonMealRegistrationRepository commonMealRegistrationRepository, ICommonMealChefRepository commonMealChefRepository)
         {
             _settings = settings;
             _commonMealRegistrationRepository = commonMealRegistrationRepository;
+            _commonMealChefRepository = commonMealChefRepository;
         }
 
         public async Task<CommonMeal> GetByDate(DateTime date)
@@ -36,6 +38,7 @@ namespace Cohousing.Server.SqlRepository
                     return null;
 
                 commonMeal.Registrations = await _commonMealRegistrationRepository.GetByCommonMealId(commonMeal.Id);
+                commonMeal.Chefs = await _commonMealChefRepository.GetByCommonMealId(commonMeal.Id);
                 return commonMeal;
             }
         }
@@ -86,7 +89,8 @@ namespace Cohousing.Server.SqlRepository
                 commonMeal.Id = output.SingleOrDefault();
 
                 // Add common meal registrations
-                commonMeal.Registrations = await _commonMealRegistrationRepository.Add(commonMeal.Registrations, commonMeal.Id);
+                commonMeal.Registrations = await _commonMealRegistrationRepository.AddMany(commonMeal.Registrations, commonMeal.Id);
+                commonMeal.Chefs = await _commonMealChefRepository.AddMany(commonMeal.Chefs, commonMeal.Id);
 
                 return commonMeal;
             }
