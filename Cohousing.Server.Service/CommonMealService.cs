@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
+using Cohousing.Server.Model.Common;
 using Cohousing.Server.Model.Factories;
 using Cohousing.Server.Model.Models;
 using Cohousing.Server.Model.Repositories;
@@ -19,14 +20,27 @@ namespace Cohousing.Server.Service
             _commonMealRepository = commonMealRepository;
             _commonMealFactory = commonMealFactory;
         }
-        
-        public async Task<IImmutableList<CommonMeal>> LoadOrCreate(DateTime date, int numDays, int numChefs, TimeSpan mealTime)
+
+        public async Task<IImmutableList<CommonMeal>> LoadPrevious(DateTime date, int numPrevious = 1)
+        {
+            var meals = await _commonMealRepository.GetPreviousByDate(date, numPrevious);
+            return meals.ToImmutableList();
+        }
+
+        public async Task<IImmutableList<CommonMeal>> LoadOrCreate(DateTime date, int numDays, int numChefs, IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>> defaultMealDates)
         {
             var result = new List<CommonMeal>();
-
-            foreach (var dayIdx in Enumerable.Range(0, numDays))
+            var lookup = defaultMealDates.ToImmutableDictionary(x => x.Key, y => y.Value);
+            
+            for (var dayIdx=0; result.Count<numDays; dayIdx++)
             {
-                var mealDate = date.AddDays(dayIdx).Add(mealTime);
+                var mealDate = date.Date.AddDays(dayIdx);
+
+                if (!lookup.ContainsKey(mealDate.DayOfWeek))
+                    continue;
+
+                var timeOfDay = lookup[mealDate.DayOfWeek];
+                mealDate = mealDate.Add(timeOfDay);
 
                 var meal = await _commonMealRepository.GetByDate(mealDate);
 

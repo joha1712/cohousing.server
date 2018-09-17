@@ -11,7 +11,7 @@ using Dapper;
 
 namespace Cohousing.Server.SqlRepository
 {
-    public class CommonMealRepository : ICommonMealRepository
+    public partial class CommonMealRepository : ICommonMealRepository
     {
         private readonly ISqlRepositorySettings _settings;
         private readonly ICommonMealRegistrationRepository _commonMealRegistrationRepository;
@@ -42,7 +42,24 @@ namespace Cohousing.Server.SqlRepository
                 return commonMeal;
             }
         }
-        
+
+        public async Task<IImmutableList<CommonMeal>> GetPreviousByDate(DateTime date, int numPrevious)
+        {
+            const string query = " SELECT TOP (@NumPrevious) [Id] Id " +
+                                 " FROM CommonMeal " +
+                                 " WHERE Date < @Date " +
+                                 " ORDER BY Date Desc ";
+            int[] ids;
+
+            using (var connection = new SqlConnection(_settings.ConnectionString))
+            {
+                ids = (await connection.QueryAsync<int>(query, new { Date = date, NumPrevious = numPrevious })).ToArray();
+            }
+
+            var result = await Task.WhenAll(ids.Select(GetById));
+            return result.ToImmutableList();
+        }
+
         public async Task<CommonMeal> GetById(int id)
         {
             const string query = " SELECT [Id] Id, [Date] Date " +
@@ -53,8 +70,10 @@ namespace Cohousing.Server.SqlRepository
             {
                 var commonMeal = await connection.QuerySingleAsync<CommonMeal>(query, new { Id = id });
                 var registrations = await _commonMealRegistrationRepository.GetByCommonMealId(commonMeal.Id);
+                var chefs = await _commonMealChefRepository.GetByCommonMealId(commonMeal.Id);
 
                 commonMeal.Registrations = registrations;
+                commonMeal.Chefs = chefs;
                 return commonMeal;
             }
         }
@@ -95,7 +114,5 @@ namespace Cohousing.Server.SqlRepository
                 return commonMeal;
             }
         }
-
-        
     }
 }

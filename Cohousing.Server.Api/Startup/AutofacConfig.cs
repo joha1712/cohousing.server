@@ -5,6 +5,7 @@ using Autofac.Extensions.DependencyInjection;
 using Autofac.Features.ResolveAnything;
 using Cohousing.Server.Api.Common;
 using Cohousing.Server.Model.Common;
+using Cohousing.Server.Model.Repositories;
 using Cohousing.Server.SqlRepository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +32,7 @@ namespace Cohousing.Server.Api.Startup
             builder.Populate(serviceDescriptors);
 
             Container = builder.Build();
+
             return Container;
         }
 
@@ -40,7 +42,14 @@ namespace Cohousing.Server.Api.Startup
             builder.RegisterInstance(configuration).As<IConfiguration>();
             builder.RegisterType<TimeProvider>().As<ITimeProvider>().SingleInstance();
             builder.RegisterType<TimeFormatter>().As<ITimeFormatter>().SingleInstance();
-            builder.RegisterType<AppSettings>().As<ISqlRepositorySettings>().SingleInstance();
+
+            builder.RegisterInstance(new ConfigRepository(AppSettings.GetConnectionString(configuration)))
+                .As<IConfigRepository>();
+
+            builder.RegisterType<AppSettings>()
+                .As<ISqlRepositorySettings>()
+                .As<ICommonMealSettings>()
+                .SingleInstance();
         }
 
         private static void AutoRegisterTypes(ContainerBuilder builder)

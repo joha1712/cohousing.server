@@ -1,11 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace Cohousing.Server.Api.Startup
 {
     public interface ICommonMealSettings
     {
-        TimeSpan DefaultMealTime { get; }
-        int DefaultNumberOfChefs { get; }
+        int NumberOfChefs { get; }
         int DefaultDaysShown { get; }
+        IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>> DefaultCommonMealDates { get; }
     }
 }
