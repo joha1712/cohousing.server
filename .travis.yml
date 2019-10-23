@@ -18,6 +18,8 @@ deploy:
   - provider: heroku
     api_key: $HEROKU_TOKEN
     app: buske-server-dev
+    on:
+      repo: joha1712/cohousing.server
   - provider: releases
     api_key: $GITHUBPAGES_RELEASETOKEN
     file: "$TRAVIS_PACKAGE_FILE"
