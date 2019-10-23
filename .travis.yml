@@ -1,0 +1,28 @@
+language: csharp
+mono: none
+dotnet: 2.1.502
+
+env:
+  global:
+    - TRAVIS_PACKAGE_VERSION="0.1.$TRAVIS_BUILD_NUMBER"
+    - TRAVIS_PACKAGE_FILE="$TRAVIS_BUILD_DIR/package_v$TRAVIS_PACKAGE_VERSION.zip"    
+    - HEROKU_TOKEN=$HEROKU_RELEASETOKEN
+
+script:
+ - dotnet restore
+ - dotnet build
+
+before_deploy:    
+  - cd Cohousing.Server.Api\bin\Debug\netcoreapp2.1 && zip -rv9 $TRAVIS_PACKAGE_FILE . && cd .. && cd .. && cd .. & cd ..
+deploy:
+  - provider: heroku
+    api_key: $HEROKU_TOKEN
+    app: buske-server-dev
+  - provider: releases
+    api_key: $GITHUBPAGES_RELEASETOKEN
+    file: "$TRAVIS_PACKAGE_FILE"
+    skip_cleanup: true
+    name: "v$TRAVIS_PACKAGE_VERSION"
+    draft: true
+after_deploy:
+  - rm $TRAVIS_PACKAGE_FILE
