@@ -34,9 +34,9 @@ namespace Cohousing.Server.Api.Controllers
         public async Task<ActionResult<CommonMealsViewModel>> List(DateTime? mealDate = null, int? numDays = null)
         {
             var dateOnly = (mealDate ?? _timeProvider.Now).Date;
-            numDays = numDays ?? _commonMealSettings.DefaultDaysShown;
+            numDays = numDays ?? _commonMealSettings.MaxDinnerDaysShown;
 
-            var commonMeals = await _commonMealService.LoadOrCreate(dateOnly, numDays.Value, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultCommonMealDates);
+            var commonMeals = await _commonMealService.LoadOrCreate(dateOnly, numDays.Value, _commonMealSettings.NumberOfChefs, _commonMealSettings.StandardDinnerDates);
             var result = _commonMealsMapper.Map(commonMeals);
 
             return result;
@@ -46,10 +46,10 @@ namespace Cohousing.Server.Api.Controllers
         public async Task<ActionResult<CommonMealsViewModel>> Previous(DateTime? mealDate, int? numDays = null)
         {
             var dateOnly = (mealDate ?? _timeProvider.Now).Date;
-            numDays = numDays ?? _commonMealSettings.DefaultDaysShown;
+            numDays = numDays ?? _commonMealSettings.MaxDinnerDaysShown;
 
             var previousMeals = await _commonMealService.LoadPrevious(dateOnly, 1);
-            var nextMeals = await _commonMealService.LoadOrCreate(dateOnly, numDays.Value - previousMeals.Count, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultCommonMealDates);
+            var nextMeals = await _commonMealService.LoadOrCreate(dateOnly, numDays.Value - previousMeals.Count, _commonMealSettings.NumberOfChefs, _commonMealSettings.StandardDinnerDates);
             
             var result = _commonMealsMapper.Map(previousMeals.Append(nextMeals));
             return result;
@@ -61,10 +61,10 @@ namespace Cohousing.Server.Api.Controllers
             if (mealDate == null)
                 throw new Exception("Meal date missing");
 
-            numDays = numDays ?? _commonMealSettings.DefaultDaysShown;
+            numDays = numDays ?? _commonMealSettings.MaxDinnerDaysShown;
             var dateOnly = mealDate.Value.Date.AddDays(1);
 
-            var commonMeals = await _commonMealService.LoadOrCreate(dateOnly, numDays.Value, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultCommonMealDates);
+            var commonMeals = await _commonMealService.LoadOrCreate(dateOnly, numDays.Value, _commonMealSettings.NumberOfChefs, _commonMealSettings.StandardDinnerDates);
             var result = _commonMealsMapper.Map(commonMeals);
 
             return result;

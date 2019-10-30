@@ -7,7 +7,7 @@ namespace Cohousing.Server.Api.Startup
     public interface ICommonMealSettings
     {
         int NumberOfChefs { get; }
-        int DefaultDaysShown { get; }
-        IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>> DefaultCommonMealDates { get; }
+        int MaxDinnerDaysShown { get; }
+        IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>> StandardDinnerDates { get; }
     }
 }

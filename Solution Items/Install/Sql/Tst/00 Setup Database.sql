@@ -1,9 +1,9 @@
-USE [master]
-CREATE DATABASE [mya.cohousing.sql.tst]
-GO
+CREATE DATABASE "mya.cohousing.sql.tst";
 
-USE [mya.cohousing.sql.tst]
-CREATE LOGIN [mya.cohousing.sql.user.tst] WITH PASSWORD = 'SHOULD_BE_SOMETHING_SECRET'
-CREATE USER [mya.cohousing.sql.user.tst] FOR LOGIN [mya.cohousing.sql.user.tst] WITH DEFAULT_SCHEMA=[dbo]
-ALTER ROLE [db_owner] ADD MEMBER [mya.cohousing.sql.user.tst]
-GO
+--USE [mya.cohousing.sql.tst]
+CREATE USER "mya.cohousing.sql.user.tst" WITH ENCRYPTED PASSWORD '[PASSWORD]';
+
+GRANT INSERT, UPDATE, DELETE ON DATABASE "mya.cohousing.sql.tst" TO "mya.cohousing.sql.user.tst";
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO "mya.cohousing.sql.user.tst";
+GRANT UPDATE ON ALL TABLES IN SCHEMA public TO "mya.cohousing.sql.user.tst";
+GRANT INSERT ON ALL TABLES IN SCHEMA public TO "mya.cohousing.sql.user.tst";

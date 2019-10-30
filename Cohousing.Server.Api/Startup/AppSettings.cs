@@ -12,8 +12,8 @@ namespace Cohousing.Server.Api.Startup
     public class AppSettings : ISqlRepositorySettings, ICommonMealSettings
     {
         private readonly IConfiguration _configuration;
-        private readonly Lazy<IImmutableList<KeyValuePair<DayOfWeek,TimeSpan>>> _cachedDefaultCommonMealDates;
-        private readonly Lazy<int> _cachedDefaultDaysShown;
+        private readonly Lazy<IImmutableList<KeyValuePair<DayOfWeek,TimeSpan>>> _cachedStandardDinnerDates;
+        private readonly Lazy<int> _cachedMaxDinnerDaysShown;
         private readonly Lazy<int> _cachedNumberOfChefs;
 
         public AppSettings(IConfiguration configuration, IConfigRepository configRepository)
@@ -26,15 +26,15 @@ namespace Cohousing.Server.Api.Startup
                 return valueAsString != null ? Convert.ToInt32(valueAsString) : 1;
             });
 
-            _cachedDefaultDaysShown = new Lazy<int>(() =>
+            _cachedMaxDinnerDaysShown = new Lazy<int>(() =>
             {
-                var valueAsString = configRepository.GetByKey("CommonMealDefaultDaysShown")?.Value;
+                var valueAsString = configRepository.GetByKey("CommonMealMaxDinnerDaysShown")?.Value;
                 return valueAsString != null ? Convert.ToInt32(valueAsString) : 5;
             });
 
-            _cachedDefaultCommonMealDates = new Lazy<IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>>>(() =>
+            _cachedStandardDinnerDates = new Lazy<IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>>>(() =>
             {
-                var valueAsString = configRepository.GetByKey("CommonMealDefaultDates").Value;
+                var valueAsString = configRepository.GetByKey("CommonMealStandardDinnerDates").Value;
                 var valueAsKeyValuePairs = valueAsString.AsKeyValuePairs();
                 return valueAsKeyValuePairs
                     .Select(x =>
@@ -50,9 +50,9 @@ namespace Cohousing.Server.Api.Startup
         public string ConnectionString => GetConnectionString(_configuration);
 
         public int NumberOfChefs => _cachedNumberOfChefs.Value;
-        public int DefaultDaysShown => _cachedDefaultDaysShown.Value;
+        public int MaxDinnerDaysShown => _cachedMaxDinnerDaysShown.Value;
 
-        public IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>> DefaultCommonMealDates => _cachedDefaultCommonMealDates.Value;
+        public IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>> StandardDinnerDates => _cachedStandardDinnerDates.Value;
 
         public static string GetConnectionString(IConfiguration configuration)
         {
