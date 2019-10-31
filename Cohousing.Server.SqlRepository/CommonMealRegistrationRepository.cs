@@ -11,11 +11,11 @@ namespace Cohousing.Server.SqlRepository
 {
     public class CommonMealRegistrationRepository : ICommonMealRegistrationRepository
     {
-        private readonly ISqlRepositorySettings _settings;
+        private readonly ISqlRepositoryConnectionFactory _connectionFactory;
 
-        public CommonMealRegistrationRepository(ISqlRepositorySettings settings)
+        public CommonMealRegistrationRepository(ISqlRepositoryConnectionFactory connectionFactory)
         {
-            _settings = settings;
+            _connectionFactory = connectionFactory;
         }
 
         public async Task<CommonMealRegistration> GetById(int id)
@@ -24,7 +24,7 @@ namespace Cohousing.Server.SqlRepository
                                  " FROM CommonMealRegistration " +
                                  " WHERE Id = @Id ";
 
-            using (var connection = new SqlConnection(_settings.ConnectionString))
+            using (var connection = _connectionFactory.New())
             {
                 var registrations = await connection.QueryAsync<CommonMealRegistration>(query, new {Id = id});
                 return registrations.SingleOrDefault();
@@ -37,7 +37,7 @@ namespace Cohousing.Server.SqlRepository
                                  " FROM CommonMealRegistration " +
                                  " WHERE CommonMealId = @CommonMealId ";
 
-            using (var connection = new SqlConnection(_settings.ConnectionString))
+            using (var connection = _connectionFactory.New())
             {
                 var registrations = await connection.QueryAsync<CommonMealRegistration>(query, new {CommonMealId = commonMealId});
                 return registrations.ToImmutableList();
@@ -49,7 +49,7 @@ namespace Cohousing.Server.SqlRepository
             const string query = " SELECT [Id] Id, [Attending] Attending, [PersonId] PersonId, [CommonMealId] CommonMealId " +
                                  " FROM CommonMealRegistration ";
 
-            using (var connection = new SqlConnection(_settings.ConnectionString))
+            using (var connection = _connectionFactory.New())
             {
                 var registrations = await connection.QueryAsync<CommonMealRegistration>(query);
                 return registrations.ToImmutableList();
@@ -63,7 +63,7 @@ namespace Cohousing.Server.SqlRepository
                 " OUTPUT Inserted.Id " +
                 " VALUES (@PersonId, @CommonMealId, @Attending) ";
 
-            using (var connection = new SqlConnection(_settings.ConnectionString))
+            using (var connection = _connectionFactory.New())
             {
                 var id = await connection.QueryAsync<int>(query, new
                 {
@@ -94,7 +94,7 @@ namespace Cohousing.Server.SqlRepository
                 " SET [PersonId] = @PersonId, [Attending] = @Attending " +
                 " WHERE [Id] = @Id ";
 
-            using (var connection = new SqlConnection(_settings.ConnectionString))
+            using (var connection = _connectionFactory.New())
             {
                 await connection.QueryAsync(query, new
                 {

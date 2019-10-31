@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Cohousing.Server.Api.Startup
 {
-    public class AppSettings : ISqlRepositorySettings, ICommonMealSettings
+    public class AppSettings : ICommonMealSettings
     {
         private readonly IConfiguration _configuration;
         private readonly Lazy<IImmutableList<KeyValuePair<DayOfWeek,TimeSpan>>> _cachedStandardDinnerDates;
@@ -57,6 +57,6 @@ namespace Cohousing.Server.Api.Startup
         public static string GetConnectionString(IConfiguration configuration)
         {
             return configuration.GetSection("AppSettings:DbConnectionString").Value;
-        }
+        }        
     }
 }

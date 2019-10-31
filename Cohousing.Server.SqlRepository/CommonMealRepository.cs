@@ -1,7 +1,5 @@
 ﻿using System;
-
 using System.Collections.Immutable;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Cohousing.Server.Model.Models;
@@ -13,13 +11,13 @@ namespace Cohousing.Server.SqlRepository
 {
     public partial class CommonMealRepository : ICommonMealRepository
     {
-        private readonly ISqlRepositorySettings _settings;
+        private readonly ISqlRepositoryConnectionFactory _connectionFactory;
         private readonly ICommonMealRegistrationRepository _commonMealRegistrationRepository;
         private readonly ICommonMealChefRepository _commonMealChefRepository;
 
-        public CommonMealRepository(ISqlRepositorySettings settings, ICommonMealRegistrationRepository commonMealRegistrationRepository, ICommonMealChefRepository commonMealChefRepository)
+        public CommonMealRepository(ISqlRepositoryConnectionFactory connectionFactory, ICommonMealRegistrationRepository commonMealRegistrationRepository, ICommonMealChefRepository commonMealChefRepository)
         {
-            _settings = settings;
+            _connectionFactory = connectionFactory;
             _commonMealRegistrationRepository = commonMealRegistrationRepository;
             _commonMealChefRepository = commonMealChefRepository;
         }
@@ -30,7 +28,7 @@ namespace Cohousing.Server.SqlRepository
                                  " FROM CommonMeal " +
                                  " WHERE Date = @Date ";
 
-            using (var connection = new SqlConnection(_settings.ConnectionString))
+            using (var connection = _connectionFactory.New())
             {
                 var commonMeal = await connection.QuerySingleOrDefaultAsync<CommonMeal>(query, new { Date = date });
 
@@ -51,7 +49,7 @@ namespace Cohousing.Server.SqlRepository
                                  " ORDER BY Date Desc ";
             int[] ids;
 
-            using (var connection = new SqlConnection(_settings.ConnectionString))
+            using (var connection = _connectionFactory.New())
             {
                 ids = (await connection.QueryAsync<int>(query, new { Date = date, NumPrevious = numPrevious })).ToArray();
             }
@@ -66,7 +64,7 @@ namespace Cohousing.Server.SqlRepository
                                  " FROM CommonMeal " +
                                  " WHERE Id = @Id ";
 
-            using (var connection = new SqlConnection(_settings.ConnectionString))
+            using (var connection = _connectionFactory.New())
             {
                 var commonMeal = await connection.QuerySingleAsync<CommonMeal>(query, new { Id = id });
                 var registrations = await _commonMealRegistrationRepository.GetByCommonMealId(commonMeal.Id);
@@ -84,7 +82,7 @@ namespace Cohousing.Server.SqlRepository
                                  " FROM CommonMeal ";
             int[] ids;
 
-            using (var connection = new SqlConnection(_settings.ConnectionString))
+            using (var connection = _connectionFactory.New())
             {
                 ids = 
                     (await connection.QueryAsync<int>(query))
@@ -102,7 +100,7 @@ namespace Cohousing.Server.SqlRepository
                 " OUTPUT Inserted.Id " +
                 " VALUES (@Date) ";
 
-            using (var connection = new SqlConnection(_settings.ConnectionString))
+            using (var connection = _connectionFactory.New())
             {
                 var output = await connection.QueryAsync<int>(query, new { Date = commonMeal.Date });
                 commonMeal.Id = output.SingleOrDefault();

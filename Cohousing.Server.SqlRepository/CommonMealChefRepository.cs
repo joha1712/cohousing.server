@@ -12,11 +12,11 @@ namespace Cohousing.Server.SqlRepository
 {
     public class CommonMealChefRepository : ICommonMealChefRepository
     {
-        private readonly ISqlRepositorySettings _settings;
+        private readonly ISqlRepositoryConnectionFactory _connectionFactory;
 
-        public CommonMealChefRepository(ISqlRepositorySettings settings)
+        public CommonMealChefRepository(ISqlRepositoryConnectionFactory connectionFactory)
         {
-            _settings = settings;
+            _connectionFactory = connectionFactory;
         }
 
         public async Task<CommonMealChef> GetById(int id)
@@ -25,7 +25,7 @@ namespace Cohousing.Server.SqlRepository
                                  " FROM CommonMealChef " +
                                  " WHERE Id = @Id ";
 
-            using (var connection = new SqlConnection(_settings.ConnectionString))
+            using (var connection = _connectionFactory.New())
             {
                 return await connection.QuerySingleOrDefaultAsync<CommonMealChef>(query, new { Id = id });
             }
@@ -36,7 +36,7 @@ namespace Cohousing.Server.SqlRepository
             const string query = " SELECT [Id] Id, [PersonId] PersonId, [Timestamp] Timestamp " +
                                  " FROM CommonMealChef ";
 
-            using (var connection = new SqlConnection(_settings.ConnectionString))
+            using (var connection = _connectionFactory.New())
             {
                 var result = await connection.QueryAsync<CommonMealChef>(query);
                 return result.ToImmutableList();
@@ -60,7 +60,7 @@ namespace Cohousing.Server.SqlRepository
                 " OUTPUT Inserted.Id " +
                 " VALUES (@PersonId, @Timestamp, @CommonMealId) ";
 
-            using (var connection = new SqlConnection(_settings.ConnectionString))
+            using (var connection = _connectionFactory.New())
             {
                 var id = await connection.QueryAsync<int>(query, new
                 {
@@ -80,7 +80,7 @@ namespace Cohousing.Server.SqlRepository
                                  " FROM CommonMealChef " +
                                  " WHERE CommonMealId = @CommonMealId ";
 
-            using (var connection = new SqlConnection(_settings.ConnectionString))
+            using (var connection = _connectionFactory.New())
             {
                 var result = await connection.QueryAsync<CommonMealChef>(query, new { CommonMealId = commonMealId });
                 return result.ToImmutableList();
@@ -94,7 +94,7 @@ namespace Cohousing.Server.SqlRepository
                 " SET [PersonId] = @PersonId, [Timestamp] = @Timestamp " +
                 " WHERE [Id] = @Id ";
 
-            using (var connection = new SqlConnection(_settings.ConnectionString))
+            using (var connection = _connectionFactory.New())
             {
                 await connection.QueryAsync(query, new
                 {

@@ -7,11 +7,11 @@ namespace Cohousing.Server.SqlRepository
 {
     public class ConfigRepository : IConfigRepository
     {
-        private readonly string _connectionString;
+        private readonly ISqlRepositoryConnectionFactory _connectionFactory;
 
-        public ConfigRepository(string connectionString)
+        public ConfigRepository(ISqlRepositoryConnectionFactory connectionFactory)
         {
-            _connectionString = connectionString;
+            _connectionFactory = connectionFactory;
         }
 
         public Config GetByKey(string key)
@@ -20,7 +20,7 @@ namespace Cohousing.Server.SqlRepository
                                  " FROM [Config] " +
                                  " WHERE [Key] = @Key ";
 
-            using (var connection = new SqlConnection(_connectionString))
+            using (var connection = _connectionFactory.New())
             {
                 return connection.QuerySingle<Config>(query, new { Key = key });
             }
