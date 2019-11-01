@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Cohousing.Server.Model.Repositories;
-using Cohousing.Server.SqlRepository;
 using Cohousing.Server.Util;
 using Microsoft.Extensions.Configuration;
 

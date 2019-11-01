@@ -33,6 +33,9 @@ namespace Cohousing.Server.Api.Startup
             services.Configure<RequestLocalizationOptions>(options =>
             {
                 options.DefaultRequestCulture = new RequestCulture(culture.Value);
+                options.FallBackToParentCultures = false;
+                options.FallBackToParentUICultures = false;
+                options.RequestCultureProviders = null;
             });
 
             services.AddResponseCompression();

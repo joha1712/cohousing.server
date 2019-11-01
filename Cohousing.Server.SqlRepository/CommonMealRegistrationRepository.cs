@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Cohousing.Server.Model.Models;
@@ -20,7 +19,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<CommonMealRegistration> GetById(int id)
         {
-            const string query = " SELECT [Id] Id, [Attending] Attending, [PersonId] PersonId, [CommonMealId] CommonMealId " +
+            const string query = " SELECT Id As Id, Attending AS Attending, PersonId AS PersonId, CommonMealId AS CommonMealId " +
                                  " FROM CommonMealRegistration " +
                                  " WHERE Id = @Id ";
 
@@ -33,7 +32,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<IImmutableList<CommonMealRegistration>> GetByCommonMealId(int commonMealId)
         {
-            const string query = " SELECT [Id] Id, [Attending] Attending, [PersonId] PersonId, [CommonMealId] CommonMealId " +
+            const string query = " SELECT Id AS Id, Attending AS Attending, PersonId AS PersonId, CommonMealId AS CommonMealId " +
                                  " FROM CommonMealRegistration " +
                                  " WHERE CommonMealId = @CommonMealId ";
 
@@ -46,7 +45,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<IImmutableList<CommonMealRegistration>> GetAll()
         {
-            const string query = " SELECT [Id] Id, [Attending] Attending, [PersonId] PersonId, [CommonMealId] CommonMealId " +
+            const string query = " SELECT Id AS Id, Attending AS Attending, PersonId AS PersonId, CommonMealId AS CommonMealId " +
                                  " FROM CommonMealRegistration ";
 
             using (var connection = _connectionFactory.New())
@@ -59,9 +58,9 @@ namespace Cohousing.Server.SqlRepository
         public async Task<CommonMealRegistration> Add(CommonMealRegistration registration, int commonMealId)
         {
             const string query =
-                " INSERT INTO CommonMealRegistration ([PersonId], [CommonMealId], [Attending]) " +
-                " OUTPUT Inserted.Id " +
-                " VALUES (@PersonId, @CommonMealId, @Attending) ";
+                " INSERT INTO CommonMealRegistration (PersonId, CommonMealId, Attending) " +
+                " VALUES (@PersonId, @CommonMealId, @Attending) " +
+                " RETURNING id ";
 
             using (var connection = _connectionFactory.New())
             {
@@ -91,8 +90,8 @@ namespace Cohousing.Server.SqlRepository
         {
             const string query =
                 " UPDATE CommonMealRegistration " +
-                " SET [PersonId] = @PersonId, [Attending] = @Attending " +
-                " WHERE [Id] = @Id ";
+                " SET PersonId = @PersonId, Attending = @Attending " +
+                " WHERE Id = @Id ";
 
             using (var connection = _connectionFactory.New())
             {

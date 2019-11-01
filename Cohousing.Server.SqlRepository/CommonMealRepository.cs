@@ -24,7 +24,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<CommonMeal> GetByDate(DateTime date)
         {
-            const string query = " SELECT [Id] Id, [Date] Date " +
+            const string query = " SELECT Id As Id, Date AS Date " +
                                  " FROM CommonMeal " +
                                  " WHERE Date = @Date ";
 
@@ -43,10 +43,11 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<IImmutableList<CommonMeal>> GetPreviousByDate(DateTime date, int numPrevious)
         {
-            const string query = " SELECT TOP (@NumPrevious) [Id] Id " +
+            const string query = " SELECT Id AS Id " +
                                  " FROM CommonMeal " +
                                  " WHERE Date < @Date " +
-                                 " ORDER BY Date Desc ";
+                                 " ORDER BY Date Desc " +
+                                 " FETCH FIRST @numPrevious ROWS ONLY ";
             int[] ids;
 
             using (var connection = _connectionFactory.New())
@@ -60,7 +61,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<CommonMeal> GetById(int id)
         {
-            const string query = " SELECT [Id] Id, [Date] Date " +
+            const string query = " SELECT Id As Id, Date AS Date " +
                                  " FROM CommonMeal " +
                                  " WHERE Id = @Id ";
 
@@ -78,7 +79,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<IImmutableList<CommonMeal>> GetAll()
         {
-            const string query = " SELECT [Id] Id " +
+            const string query = " SELECT Id AS Id " +
                                  " FROM CommonMeal ";
             int[] ids;
 
@@ -96,9 +97,9 @@ namespace Cohousing.Server.SqlRepository
         public async Task<CommonMeal> Add(CommonMeal commonMeal)
         {
             const string query = 
-                " INSERT INTO CommonMeal ([Date]) " +
-                " OUTPUT Inserted.Id " +
-                " VALUES (@Date) ";
+                " INSERT INTO CommonMeal (Date) " +
+                " VALUES (@Date) " +
+                " RETURNING id ";
 
             using (var connection = _connectionFactory.New())
             {
