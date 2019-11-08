@@ -34,7 +34,7 @@ namespace Cohousing.Server.Api.Mappers
                 Id = item.Id + "",
                 Attending = item.Attending,
                 PersonId = item.PersonId + "",
-                PersonName = $"{person.FirstName} {person.LastName}"
+                PersonName = person.CallName
             };
         }
     }

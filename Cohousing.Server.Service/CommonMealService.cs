@@ -32,7 +32,7 @@ namespace Cohousing.Server.Service
             var result = new List<CommonMeal>();
             var lookup = defaultMealDates.ToImmutableDictionary(x => x.Key, y => y.Value);
             
-            for (var dayIdx=0; result.Count<numDays; dayIdx++)
+            for (var dayIdx=0; dayIdx<numDays; dayIdx++)
             {
                 var mealDate = date.Date.AddDays(dayIdx);
 

@@ -19,7 +19,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<Person> GetById(int id)
         {
-            const string query = " SELECT Id AS Id, Active AS Active, FirstName AS FirstName, LastName AS LastName, AddressId AS AddressId " +
+            const string query = " SELECT Id AS Id, Active AS Active, FirstName AS FirstName, LastName AS LastName, AddressId AS AddressId, CallName AS CallName " +
                                  " FROM Person " +
                                  " WHERE Id = @Id ";
 
@@ -31,7 +31,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<IImmutableList<Person>> GetAll()
         {
-            const string query = " SELECT Id AS Id, Active AS Active, FirstName AS FirstName, LastName AS LastName, AddressId AS AddressId " +
+            const string query = " SELECT Id AS Id, Active AS Active, FirstName AS FirstName, LastName AS LastName, AddressId AS AddressId, CallName As CallName " +
                                  " FROM Person ";
 
             using (var connection = _connectionFactory.New())

@@ -27,7 +27,7 @@ namespace Cohousing.Server.Api.Mappers
                 Persons = persons.Select(x => new PersonViewModel
                 {
                     Id = x.Id + "",
-                    Name = $"{x.FirstName} {x.LastName}"
+                    Name = x.CallName
                 }).ToImmutableList()
             };
         }
