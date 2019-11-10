@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using Cohousing.Server.Model.Repositories;
 using Cohousing.Server.Util;
+using HerokuNpgSql;
 using Microsoft.Extensions.Configuration;
 
 namespace Cohousing.Server.Api.Startup
@@ -14,10 +15,13 @@ namespace Cohousing.Server.Api.Startup
         private readonly Lazy<IImmutableList<KeyValuePair<DayOfWeek,TimeSpan>>> _cachedDefaultDinnerDates;
         private readonly Lazy<int> _cachedDefaultDaysToLoad;
         private readonly Lazy<int> _cachedNumberOfChefs;
+        private readonly Lazy<string> _cachedConnectionString;
 
         public AppSettings(IConfiguration configuration, IConfigRepository configRepository)
         {
             _configuration = configuration;
+            
+            _cachedConnectionString = new Lazy<string>(() => GetConnectionString(configuration));
 
             _cachedNumberOfChefs = new Lazy<int>(() =>
             {
@@ -46,8 +50,10 @@ namespace Cohousing.Server.Api.Startup
             });
         }
 
-        public string ConnectionString => GetConnectionString(_configuration);
+        // ReSharper disable once UnusedMember.Global
+        public string ConnectionString => _cachedConnectionString.Value;
 
+        // ReSharper disable once UnusedMember.Global
         public string ApiUrl => GetApiWebHostUrl(_configuration);
 
         public int NumberOfChefs => _cachedNumberOfChefs.Value;
@@ -57,6 +63,15 @@ namespace Cohousing.Server.Api.Startup
 
         public static string GetConnectionString(IConfiguration configuration)
         {
+            // Use heroku DATABASE_URL environment variable if present
+            var herokuConnection = Environment.GetEnvironmentVariable("DATABASE_URL");
+            if (!string.IsNullOrEmpty(herokuConnection))
+            {
+                var connection = new HerokuNpgSqlConnectionStringBuilder(herokuConnection);
+                return connection.ConnectionString;
+            }
+                
+            // Use fallback from app config
             return configuration.GetSection("AppSettings:DbConnectionString").Value;
         }
 

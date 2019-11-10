@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -29,6 +29,7 @@
     <ProjectReference Include="..\Cohousing.Server.Service\Cohousing.Server.Service.csproj" />
     <ProjectReference Include="..\Cohousing.Server.SqlRepository\Cohousing.Server.SqlRepository.csproj" />
     <ProjectReference Include="..\Cohousing.Server.Util\Cohousing.Server.Util.csproj" />
+    <ProjectReference Include="..\Utils\HerokuNpgSql\HerokuNpgSql.csproj" />
   </ItemGroup>
 
 </Project>
