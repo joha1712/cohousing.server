@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Cohousing.Server.Api.Mappers;
 using Cohousing.Server.Api.Startup;
@@ -32,9 +33,18 @@ namespace Cohousing.Server.Api.Controllers
         public async Task<ActionResult<CommonMealsViewModel>> List(DateTime? mealDate = null, int? numDaysToLoad = null)
         {
             numDaysToLoad = numDaysToLoad ?? _commonMealSettings.DefaultDaysToLoad;
-            var dateOnly = (mealDate ?? _timeProvider.Now.StartOfWeekDate()).Date;
+            var mealDateOnly = (mealDate ?? _timeProvider.Now.StartOfWeekDate()).Date;
 
-            var commonMeals = await _commonMealService.LoadOrCreate(dateOnly, numDaysToLoad.Value, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultDinnerDates);
+            await _commonMealService.CreateDefaultMeals(mealDateOnly, numDaysToLoad.Value, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultDinnerDates);
+            var commonMeals = await _commonMealService.Load(mealDateOnly, numDaysToLoad.Value);
+
+            if (mealDate == null && commonMeals.Last().Date <= _timeProvider.Now)
+            {
+                mealDateOnly = mealDateOnly.AddDays(7);
+                await _commonMealService.CreateDefaultMeals(mealDateOnly, numDaysToLoad.Value, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultDinnerDates);
+                commonMeals = await _commonMealService.Load(mealDateOnly, numDaysToLoad.Value);
+            }
+            
             var result = _commonMealsMapper.Map(commonMeals);
 
             return result;
@@ -47,9 +57,10 @@ namespace Cohousing.Server.Api.Controllers
             
             numDaysBack = numDaysBack ?? _commonMealSettings.DefaultDaysToLoad;
             numDaysToLoad = numDaysToLoad ?? _commonMealSettings.DefaultDaysToLoad;
-            var dateOnly = mealDate.Date.AddDays(-numDaysBack.Value);            
+            var mealDateOnly = mealDate.Date.AddDays(-numDaysBack.Value);            
 
-            var commonMeals = await _commonMealService.LoadOrCreate(dateOnly, numDaysToLoad.Value, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultDinnerDates);
+            await _commonMealService.CreateDefaultMeals(mealDateOnly, numDaysToLoad.Value, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultDinnerDates);
+            var commonMeals = await _commonMealService.Load(mealDateOnly, numDaysToLoad.Value);
             
             var result = _commonMealsMapper.Map(commonMeals);
             return result;
@@ -62,11 +73,12 @@ namespace Cohousing.Server.Api.Controllers
 
             numDaysAhead = numDaysAhead ?? _commonMealSettings.DefaultDaysToLoad;
             numDaysToLoad = numDaysToLoad ?? _commonMealSettings.DefaultDaysToLoad;
-            var dateOnly = mealDate.Date.AddDays(numDaysAhead.Value);
+            var mealDateOnly = mealDate.Date.AddDays(numDaysAhead.Value);
 
-            var commonMeals = await _commonMealService.LoadOrCreate(dateOnly, numDaysToLoad.Value, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultDinnerDates);
+            await _commonMealService.CreateDefaultMeals(mealDateOnly, numDaysToLoad.Value, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultDinnerDates);
+            var commonMeals = await _commonMealService.Load(mealDateOnly, numDaysToLoad.Value);
+            
             var result = _commonMealsMapper.Map(commonMeals);
-
             return result;
         }
     }

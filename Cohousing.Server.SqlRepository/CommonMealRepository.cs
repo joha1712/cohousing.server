@@ -9,7 +9,7 @@ using Dapper;
 
 namespace Cohousing.Server.SqlRepository
 {
-    public partial class CommonMealRepository : ICommonMealRepository
+    public class CommonMealRepository : ICommonMealRepository
     {
         private readonly ISqlRepositoryConnectionFactory _connectionFactory;
         private readonly ICommonMealRegistrationRepository _commonMealRegistrationRepository;
@@ -21,24 +21,30 @@ namespace Cohousing.Server.SqlRepository
             _commonMealRegistrationRepository = commonMealRegistrationRepository;
             _commonMealChefRepository = commonMealChefRepository;
         }
-
-        public async Task<CommonMeal> GetByDate(DateTime date)
+        
+        public async Task<IImmutableList<CommonMeal>> GetByDateRange(DateTime dateFrom, DateTime dateTo)
         {
             const string query = " SELECT Id As Id, Date AS Date " +
                                  " FROM CommonMeal " +
-                                 " WHERE Date = @Date ";
+                                 " WHERE Date >= @DateFrom AND Date <= @DateTo ";
 
             using (var connection = _connectionFactory.New())
             {
-                var commonMeal = await connection.QuerySingleOrDefaultAsync<CommonMeal>(query, new { Date = date });
+                var commonMeals = (await connection.QueryAsync<CommonMeal>(query, new { DateFrom = dateFrom, DateTo = dateTo })).ToImmutableList();
 
-                if (commonMeal == null)
-                    return null;
+                foreach (var commonMeal in commonMeals)
+                {
+                    commonMeal.Registrations = await _commonMealRegistrationRepository.GetByCommonMealId(commonMeal.Id);
+                    commonMeal.Chefs = await _commonMealChefRepository.GetByCommonMealId(commonMeal.Id);
+                }
 
-                commonMeal.Registrations = await _commonMealRegistrationRepository.GetByCommonMealId(commonMeal.Id);
-                commonMeal.Chefs = await _commonMealChefRepository.GetByCommonMealId(commonMeal.Id);
-                return commonMeal;
+                return commonMeals;
             }
+        }
+
+        public async Task<CommonMeal> GetByDate(DateTime date)
+        {
+            return (await GetByDateRange(date, date)).SingleOrDefault();
         }
 
         public async Task<IImmutableList<CommonMeal>> GetPreviousByDate(DateTime date, int numPrevious)

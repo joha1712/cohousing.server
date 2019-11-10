@@ -8,6 +8,7 @@ namespace Cohousing.Server.Model.Repositories
     public interface ICommonMealRepository : IRepository<CommonMeal>
     {
         Task<CommonMeal> GetByDate(DateTime date);
+        Task<IImmutableList<CommonMeal>> GetByDateRange(DateTime dateFrom, DateTime dateTo);
         Task<IImmutableList<CommonMeal>> GetPreviousByDate(DateTime date, int numPrevious);
     }
 }

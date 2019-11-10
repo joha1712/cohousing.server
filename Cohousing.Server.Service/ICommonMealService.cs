@@ -8,7 +8,7 @@ namespace Cohousing.Server.Service
 {
     public interface ICommonMealService
     {
-        Task<IImmutableList<CommonMeal>> LoadOrCreate(DateTime date, int numDays, int numChefs, IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>> defaultMealDates);
-        Task<IImmutableList<CommonMeal>> LoadPrevious(DateTime date, int numPrevious = 1);
+        Task<IImmutableList<CommonMeal>> Load(DateTime date, int numDays);
+        Task CreateDefaultMeals(DateTime startDate, int numDays, int numChefs, IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>> defaultMealDates);
     }
 }

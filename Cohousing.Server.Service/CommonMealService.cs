@@ -7,6 +7,7 @@ using Cohousing.Server.Model.Common;
 using Cohousing.Server.Model.Factories;
 using Cohousing.Server.Model.Models;
 using Cohousing.Server.Model.Repositories;
+using Cohousing.Server.Util;
 
 namespace Cohousing.Server.Service
 {
@@ -14,20 +15,16 @@ namespace Cohousing.Server.Service
     {
         private readonly ICommonMealRepository _commonMealRepository;
         private readonly CommonMealFactory _commonMealFactory;
-        
-        public CommonMealService(ICommonMealRepository commonMealRepository, CommonMealFactory commonMealFactory)
+        private readonly ITimeProvider _timeProvider;
+
+        public CommonMealService(ICommonMealRepository commonMealRepository, CommonMealFactory commonMealFactory, ITimeProvider timeProvider)
         {
             _commonMealRepository = commonMealRepository;
             _commonMealFactory = commonMealFactory;
+            _timeProvider = timeProvider;
         }
-
-        public async Task<IImmutableList<CommonMeal>> LoadPrevious(DateTime date, int numPrevious = 1)
-        {
-            var meals = await _commonMealRepository.GetPreviousByDate(date, numPrevious);
-            return meals.ToImmutableList();
-        }
-
-        public async Task<IImmutableList<CommonMeal>> LoadOrCreate(DateTime date, int numDays, int numChefs, IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>> defaultMealDates)
+        
+        public async Task CreateDefaultMeals(DateTime date, int numDays, int numChefs, IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>> defaultMealDates)
         {
             var result = new List<CommonMeal>();
             var lookup = defaultMealDates.ToImmutableDictionary(x => x.Key, y => y.Value);
@@ -52,8 +49,11 @@ namespace Cohousing.Server.Service
 
                 result.Add(meal);
             }
+        }
 
-            return result.ToImmutableList();
+        public async Task<IImmutableList<CommonMeal>> Load(DateTime mealDate, int numDays)
+        {
+            return await _commonMealRepository.GetByDateRange(mealDate, mealDate.AddDays(numDays));
         }
     }
 }

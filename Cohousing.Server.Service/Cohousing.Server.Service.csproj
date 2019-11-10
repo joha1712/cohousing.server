@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Cohousing.Server.Model\Cohousing.Server.Model.csproj" />
+    <ProjectReference Include="..\Cohousing.Server.Util\Cohousing.Server.Util.csproj" />
   </ItemGroup>
 
 </Project>
