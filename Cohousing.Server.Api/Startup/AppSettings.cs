@@ -64,7 +64,7 @@ namespace Cohousing.Server.Api.Startup
         public static string GetConnectionString(IConfiguration configuration)
         {
             // Use heroku DATABASE_URL environment variable if present
-            var herokuConnection = Environment.GetEnvironmentVariable("DATABASE_URL");
+            var herokuConnection = ReadHerokuSetting("DATABASE_URL");
             if (!string.IsNullOrEmpty(herokuConnection))
             {
                 var connection = new HerokuNpgSqlConnectionStringBuilder(herokuConnection);
@@ -77,7 +77,13 @@ namespace Cohousing.Server.Api.Startup
 
         public static string GetApiWebHostUrl(IConfiguration configuration)
         {
-            return configuration.GetSection("AppSettings:ApiWebHostUrl").Value;
-        }        
+            return ReadHerokuSetting("HOST_URL") ?? configuration.GetSection("AppSettings:ApiWebHostUrl").Value;
+        }    
+        
+        static string ReadHerokuSetting(string herokuKey)
+        {
+            // Read Heroku setting from environment
+            return Environment.GetEnvironmentVariable(herokuKey.ToUpperInvariant());
+        }
     }
 }
