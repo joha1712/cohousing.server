@@ -77,7 +77,7 @@ namespace Cohousing.Server.Api.Startup
 
         public static string GetApiWebHostUrl(IConfiguration configuration)
         {
-            return ReadHerokuSetting("HOST_URL") ?? configuration.GetSection("AppSettings:ApiWebHostUrl").Value;
+            return ReadHerokuSetting("ASPNETCORE_URLS") ?? configuration.GetSection("AppSettings:ApiWebHostUrl").Value;
         }    
         
         static string ReadHerokuSetting(string herokuKey)
