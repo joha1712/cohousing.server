@@ -6,6 +6,11 @@ env:
     - TRAVIS_PACKAGE_VERSION="0.1.$TRAVIS_BUILD_NUMBER"
     - TRAVIS_PACKAGE_FILE="$TRAVIS_BUILD_DIR/package_v$TRAVIS_PACKAGE_VERSION.zip"    
     - HEROKU_TOKEN=$HEROKU_RELEASETOKEN
+      
+notifications:
+  email:
+    on_success: always
+    on_failure: always
 
 script:
  - dotnet restore
