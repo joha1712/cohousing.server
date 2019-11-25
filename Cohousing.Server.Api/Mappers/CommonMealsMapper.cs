@@ -24,11 +24,15 @@ namespace Cohousing.Server.Api.Mappers
         {
             var persons = _personRepository.GetAll().Result;
             var weekNo = startOfWeekDate.GetIso8601WeekNo().ToString() ?? "{ukendt}";
+            var mappedMeals = _commonMealMapper
+                .MapMany(meals)
+                .OrderBy(x => x.Date)
+                .ToImmutableList();
 
             return new CommonMealsViewModel
             {
                 Title = $"Fællesspisning - uge {weekNo}",
-                Meals = _commonMealMapper.MapMany(meals),
+                Meals = mappedMeals,
                 WeekDate = startOfWeekDate,
                 Persons = persons.Select(x => new PersonViewModel
                 {

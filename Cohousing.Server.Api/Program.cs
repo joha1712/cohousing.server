@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Cohousing.Server.Api.Startup;
-using System;
 using System.Globalization;
 
 namespace Cohousing.Server.Api
