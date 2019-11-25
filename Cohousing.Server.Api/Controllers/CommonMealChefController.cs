@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cohousing.Server.Api.Controllers
 {
-    [Route("api/commonmeal")]
+    [Route("api/commonmeals")]
     [ApiController]
     public class CommonMealChefController : ControllerBase
     {

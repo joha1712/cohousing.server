@@ -29,6 +29,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "All", "All", "{3A13E53C-3D0A-43F3-98CE-24BBBE70EFFE}"
 	ProjectSection(SolutionItems) = preProject
 		Solution Items\Install\Sql\All\01 Create Tables.sql = Solution Items\Install\Sql\All\01 Create Tables.sql
+		Solution Items\Install\Sql\All\02 Modify Tables.sql = Solution Items\Install\Sql\All\02 Modify Tables.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Prd", "Prd", "{6D8B4F52-574C-45E9-886C-6EFBE3FC6971}"

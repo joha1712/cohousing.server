@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Immutable;
+using System.Globalization;
 using System.Threading.Tasks;
 using Cohousing.Server.Model.Models;
 
@@ -9,6 +10,6 @@ namespace Cohousing.Server.Model.Repositories
     {
         Task<CommonMeal> GetByDate(DateTime date);
         Task<IImmutableList<CommonMeal>> GetByDateRange(DateTime dateFrom, DateTime dateTo);
-        Task<IImmutableList<CommonMeal>> GetPreviousByDate(DateTime date, int numPrevious);
+        Task UpdateNote(int id, string note);
     }
 }

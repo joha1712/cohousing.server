@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cohousing.Server.Api.Controllers
 {
-    [Route("api/commonmeal")]
+    [Route("api/commonmeals")]
     [ApiController]
     public class CommonMealController : ControllerBase
     {
@@ -29,7 +29,7 @@ namespace Cohousing.Server.Api.Controllers
         }
         
         // GET api/values
-        [HttpGet("commonmeals/week")]
+        [HttpGet("list/week")]
         public async Task<ActionResult<CommonMealsViewModel>> List(DateTime weekDate)
         {
             var numDaysToLoad = _commonMealSettings.DefaultDaysToLoad;
@@ -43,7 +43,7 @@ namespace Cohousing.Server.Api.Controllers
         }
 
         // GET api/values
-        [HttpGet("commonmeals/activeweek")]
+        [HttpGet("list/activeweek")]
         public async Task<ActionResult<CommonMealsViewModel>> List()
         {
             var startOfWeekDate = _timeProvider.Now.StartOfWeekDate().Date;
@@ -60,7 +60,7 @@ namespace Cohousing.Server.Api.Controllers
             return result;
         }
 
-        [HttpGet("commonmeals/previousweek")]
+        [HttpGet("list/previousweek")]
         public async Task<ActionResult<CommonMealsViewModel>> Previous(DateTime weekDate)
         {
             if (weekDate == null) throw new Exception("Week date missing");
@@ -76,7 +76,7 @@ namespace Cohousing.Server.Api.Controllers
             return result;
         }
 
-        [HttpGet("commonmeals/nextweek")]
+        [HttpGet("list/nextweek")]
         public async Task<ActionResult<CommonMealsViewModel>> Next(DateTime weekDate)
         {
             if (weekDate == null) throw new Exception("Week date missing");

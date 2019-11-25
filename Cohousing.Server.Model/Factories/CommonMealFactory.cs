@@ -27,7 +27,8 @@ namespace Cohousing.Server.Model.Factories
                 Id = -1,
                 Date = date,
                 Registrations = _commonMealRegistrationFactory.CreateMany(persons),
-                Chefs = _commonMealChefFactory.CreateMany(numChefs)
+                Chefs = _commonMealChefFactory.CreateMany(numChefs),
+                Note = null
             };
         }
     }

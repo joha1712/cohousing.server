@@ -24,7 +24,7 @@ namespace Cohousing.Server.SqlRepository
         
         public async Task<IImmutableList<CommonMeal>> GetByDateRange(DateTime dateFrom, DateTime dateTo)
         {
-            const string query = " SELECT Id As Id, Date AS Date " +
+            const string query = " SELECT Id As Id, Date AS Date, Note As Note " +
                                  " FROM CommonMeal " +
                                  " WHERE Date >= @DateFrom AND Date <= @DateTo ";
 
@@ -47,27 +47,9 @@ namespace Cohousing.Server.SqlRepository
             return (await GetByDateRange(date, date)).SingleOrDefault();
         }
 
-        public async Task<IImmutableList<CommonMeal>> GetPreviousByDate(DateTime date, int numPrevious)
-        {
-            const string query = " SELECT Id AS Id " +
-                                 " FROM CommonMeal " +
-                                 " WHERE Date < @Date " +
-                                 " ORDER BY Date Desc " +
-                                 " FETCH FIRST @numPrevious ROWS ONLY ";
-            int[] ids;
-
-            using (var connection = _connectionFactory.New())
-            {
-                ids = (await connection.QueryAsync<int>(query, new { Date = date, NumPrevious = numPrevious })).ToArray();
-            }
-
-            var result = await Task.WhenAll(ids.Select(GetById));
-            return result.ToImmutableList();
-        }
-
         public async Task<CommonMeal> GetById(int id)
         {
-            const string query = " SELECT Id As Id, Date AS Date " +
+            const string query = " SELECT Id As Id, Date AS Date, Note As Note " +
                                  " FROM CommonMeal " +
                                  " WHERE Id = @Id ";
 
@@ -83,33 +65,16 @@ namespace Cohousing.Server.SqlRepository
             }
         }
 
-        public async Task<IImmutableList<CommonMeal>> GetAll()
-        {
-            const string query = " SELECT Id AS Id " +
-                                 " FROM CommonMeal ";
-            int[] ids;
-
-            using (var connection = _connectionFactory.New())
-            {
-                ids = 
-                    (await connection.QueryAsync<int>(query))
-                    .ToArray();
-            }
-
-            var result = await Task.WhenAll(ids.Select(GetById));
-            return result.ToImmutableList();
-        }
-
         public async Task<CommonMeal> Add(CommonMeal commonMeal)
         {
             const string query = 
-                " INSERT INTO CommonMeal (Date) " +
-                " VALUES (@Date) " +
+                " INSERT INTO CommonMeal (Date, Notes) " +
+                " VALUES (@Date, @Note) " +
                 " RETURNING id ";
 
             using (var connection = _connectionFactory.New())
             {
-                var output = await connection.QueryAsync<int>(query, new { Date = commonMeal.Date });
+                var output = await connection.QueryAsync<int>(query, new { Date = commonMeal.Date, Note = commonMeal.Note });
                 commonMeal.Id = output.SingleOrDefault();
 
                 // Add common meal registrations
@@ -117,6 +82,19 @@ namespace Cohousing.Server.SqlRepository
                 commonMeal.Chefs = await _commonMealChefRepository.AddMany(commonMeal.Chefs, commonMeal.Id);
 
                 return commonMeal;
+            }
+        }
+        
+        public async Task UpdateNote(int id, string note)
+        {
+            const string query = 
+                " UPDATE CommonMeal " +
+                " SET Note = @Note " +
+                " WHERE Id = @Id ";
+
+            using (var connection = _connectionFactory.New())
+            {
+                await connection.QueryAsync(query, new { Id = id, Note = note });
             }
         }
     }

@@ -29,7 +29,7 @@ namespace Cohousing.Server.Api.Mappers
             {
                 Title = $"Fællesspisning - uge {weekNo}",
                 Meals = _commonMealMapper.MapMany(meals),
-                WeekDate = startOfWeekDate, 
+                WeekDate = startOfWeekDate,
                 Persons = persons.Select(x => new PersonViewModel
                 {
                     Id = x.Id + "",

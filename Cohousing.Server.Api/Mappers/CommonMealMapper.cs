@@ -36,6 +36,7 @@ namespace Cohousing.Server.Api.Mappers
                 Date = item.Date,
                 DateName = _timeFormatter.GetDateName(item.Date),
                 DayName = _timeFormatter.GetDayName(item.Date).ToUpperFirstLetter(),
+                Note = item.Note,
                 IsActiveMeal = _timeProvider.Now.Date == item.Date.Date,
                 RegistrationGroups = _registrationGroupFactory.CreateGroups(registrations),
                 Chefs = _commonMealChefMapper.MapMany(item.Chefs)

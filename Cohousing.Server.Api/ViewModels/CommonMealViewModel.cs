@@ -11,6 +11,7 @@ namespace Cohousing.Server.Api.ViewModels
         public string DayName { get; set; }
         public string DateName { get; set; }
         public bool IsActiveMeal { get; set; }
+        public string Note { get; set; }
 
         public IImmutableList<CommonMealRegistrationGroupViewModel> RegistrationGroups { get; set; }
         public IImmutableList<CommonMealChefViewModel> Chefs { get; set; }
