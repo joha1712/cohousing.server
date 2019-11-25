@@ -27,58 +27,68 @@ namespace Cohousing.Server.Api.Controllers
             _commonMealsMapper = commonMealsMapper;
             _commonMealSettings = commonMealSettings;
         }
+        
+        // GET api/values
+        [HttpGet("commonmeals/week")]
+        public async Task<ActionResult<CommonMealsViewModel>> List(DateTime weekDate)
+        {
+            var numDaysToLoad = _commonMealSettings.DefaultDaysToLoad;
+            var startOfWeekDate = weekDate.StartOfWeekDate().Date;
+
+            await _commonMealService.CreateDefaultMeals(startOfWeekDate, numDaysToLoad, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultDinnerDates);
+            var commonMeals = await _commonMealService.Load(startOfWeekDate, numDaysToLoad);
+            
+            var result = _commonMealsMapper.Map(commonMeals, startOfWeekDate);
+            return result;
+        }
 
         // GET api/values
-        [HttpGet("commonmeals")]
-        public async Task<ActionResult<CommonMealsViewModel>> List(DateTime? mealDate = null, int? numDaysToLoad = null)
+        [HttpGet("commonmeals/activeweek")]
+        public async Task<ActionResult<CommonMealsViewModel>> List()
         {
-            numDaysToLoad = numDaysToLoad ?? _commonMealSettings.DefaultDaysToLoad;
-            var mealDateOnly = (mealDate ?? _timeProvider.Now.StartOfWeekDate()).Date;
+            var startOfWeekDate = _timeProvider.Now.StartOfWeekDate().Date;
 
-            await _commonMealService.CreateDefaultMeals(mealDateOnly, numDaysToLoad.Value, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultDinnerDates);
-            var commonMeals = await _commonMealService.Load(mealDateOnly, numDaysToLoad.Value);
-
-            if (mealDate == null && commonMeals.Last().Date <= _timeProvider.Now)
+            var result = await List(startOfWeekDate);
+           
+            // Did we get any active meals - if not fetch next week
+            if (result.Value.Meals.Last().Date <= _timeProvider.Now)
             {
-                mealDateOnly = mealDateOnly.AddDays(7);
-                await _commonMealService.CreateDefaultMeals(mealDateOnly, numDaysToLoad.Value, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultDinnerDates);
-                commonMeals = await _commonMealService.Load(mealDateOnly, numDaysToLoad.Value);
+                startOfWeekDate = startOfWeekDate.AddDays(7);
+                result = await List(startOfWeekDate);
             }
             
-            var result = _commonMealsMapper.Map(commonMeals);
-
             return result;
         }
 
-        [HttpGet("commonmeals/previous")]
-        public async Task<ActionResult<CommonMealsViewModel>> Previous(DateTime mealDate, int? numDaysBack = null, int? numDaysToLoad = null)
+        [HttpGet("commonmeals/previousweek")]
+        public async Task<ActionResult<CommonMealsViewModel>> Previous(DateTime weekDate)
         {
-            if (mealDate == null) throw new Exception("Meal date missing");
+            if (weekDate == null) throw new Exception("Week date missing");
             
-            numDaysBack = numDaysBack ?? _commonMealSettings.DefaultDaysToLoad;
-            numDaysToLoad = numDaysToLoad ?? _commonMealSettings.DefaultDaysToLoad;
-            var mealDateOnly = mealDate.Date.AddDays(-numDaysBack.Value);            
+            var numDaysBack = _commonMealSettings.DefaultDaysToLoad;
+            var numDaysToLoad = _commonMealSettings.DefaultDaysToLoad;
+            var previousWeekDate = weekDate.Date.AddDays(-numDaysBack);            
 
-            await _commonMealService.CreateDefaultMeals(mealDateOnly, numDaysToLoad.Value, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultDinnerDates);
-            var commonMeals = await _commonMealService.Load(mealDateOnly, numDaysToLoad.Value);
+            await _commonMealService.CreateDefaultMeals(previousWeekDate, numDaysToLoad, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultDinnerDates);
+            var commonMeals = await _commonMealService.Load(previousWeekDate, numDaysToLoad);
             
-            var result = _commonMealsMapper.Map(commonMeals);
+            var result = _commonMealsMapper.Map(commonMeals, previousWeekDate);
             return result;
         }
 
-        [HttpGet("commonmeals/next")]
-        public async Task<ActionResult<CommonMealsViewModel>> Next(DateTime mealDate, int? numDaysAhead = null, int? numDaysToLoad = null)
+        [HttpGet("commonmeals/nextweek")]
+        public async Task<ActionResult<CommonMealsViewModel>> Next(DateTime weekDate)
         {
-            if (mealDate == null) throw new Exception("Meal date missing");
+            if (weekDate == null) throw new Exception("Week date missing");
 
-            numDaysAhead = numDaysAhead ?? _commonMealSettings.DefaultDaysToLoad;
-            numDaysToLoad = numDaysToLoad ?? _commonMealSettings.DefaultDaysToLoad;
-            var mealDateOnly = mealDate.Date.AddDays(numDaysAhead.Value);
+            var numDaysAhead = _commonMealSettings.DefaultDaysToLoad;
+            var numDaysToLoad = _commonMealSettings.DefaultDaysToLoad;
+            var nextWeekDate = weekDate.Date.AddDays(numDaysAhead);
 
-            await _commonMealService.CreateDefaultMeals(mealDateOnly, numDaysToLoad.Value, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultDinnerDates);
-            var commonMeals = await _commonMealService.Load(mealDateOnly, numDaysToLoad.Value);
+            await _commonMealService.CreateDefaultMeals(nextWeekDate, numDaysToLoad, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultDinnerDates);
+            var commonMeals = await _commonMealService.Load(nextWeekDate, numDaysToLoad);
             
-            var result = _commonMealsMapper.Map(commonMeals);
+            var result = _commonMealsMapper.Map(commonMeals, nextWeekDate);
             return result;
         }
     }
