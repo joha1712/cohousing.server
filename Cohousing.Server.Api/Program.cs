@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Cohousing.Server.Api.Startup;
 using System;
+using System.Globalization;
 
 namespace Cohousing.Server.Api
 {
@@ -10,6 +11,7 @@ namespace Cohousing.Server.Api
     {
         public static void Main(string[] args)
         {
+            CultureInfo.CurrentCulture = new CultureInfo("da-DK");
             CreateWebHostBuilder(args).Build().Run();
         }
 
