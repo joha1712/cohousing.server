@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
 using Cohousing.Server.Api.Mappers;
@@ -30,66 +31,68 @@ namespace Cohousing.Server.Api.Controllers
         
         // GET api/values
         [HttpGet("list/week")]
-        public async Task<ActionResult<CommonMealsViewModel>> List(DateTime weekDate)
+        public async Task<ActionResult<CommonMealsViewModel>> List(DateTime weekDate, string sortExpr = null)
         {
-            var numDaysToLoad = _commonMealSettings.DefaultDaysToLoad;
+            const int numDaysToLoad = 7;
             var startOfWeekDate = weekDate.StartOfWeekDate().Date;
 
             await _commonMealService.CreateDefaultMeals(startOfWeekDate, numDaysToLoad, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultDinnerDates);
             var commonMeals = await _commonMealService.Load(startOfWeekDate, numDaysToLoad);
             
             var result = _commonMealsMapper.Map(commonMeals, startOfWeekDate);
+            SortRegistrationsGroups(result, sortExpr);
+            
             return result;
         }
 
         // GET api/values
         [HttpGet("list/activeweek")]
-        public async Task<ActionResult<CommonMealsViewModel>> List()
+        public async Task<ActionResult<CommonMealsViewModel>> List(string sortExpr = "")
         {
             var startOfWeekDate = _timeProvider.Now.StartOfWeekDate().Date;
-
-            var result = await List(startOfWeekDate);
+            var result = await List(startOfWeekDate, sortExpr);
            
-            // Did we get any active meals - if not fetch next week
-            if (result.Value.Meals.Last().Date <= _timeProvider.Now)
-            {
-                startOfWeekDate = startOfWeekDate.AddDays(7);
-                result = await List(startOfWeekDate);
-            }
+            // Did we get any active meals - if so we are done
+            if (result.Value.Meals.Last().Date > _timeProvider.Now) 
+                return result;
             
+            // Else fetch next week
+            startOfWeekDate = startOfWeekDate.AddDays(7);
+            result = await List(startOfWeekDate, sortExpr);
+
             return result;
         }
 
         [HttpGet("list/previousweek")]
-        public async Task<ActionResult<CommonMealsViewModel>> Previous(DateTime weekDate)
+        public async Task<ActionResult<CommonMealsViewModel>> Previous(DateTime weekDate, string sortExpr = null)
         {
             if (weekDate == null) throw new Exception("Week date missing");
             
-            var numDaysBack = _commonMealSettings.DefaultDaysToLoad;
-            var numDaysToLoad = _commonMealSettings.DefaultDaysToLoad;
-            var previousWeekDate = weekDate.Date.AddDays(-numDaysBack);            
-
-            await _commonMealService.CreateDefaultMeals(previousWeekDate, numDaysToLoad, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultDinnerDates);
-            var commonMeals = await _commonMealService.Load(previousWeekDate, numDaysToLoad);
-            
-            var result = _commonMealsMapper.Map(commonMeals, previousWeekDate);
-            return result;
+            var previousWeekDate = weekDate.Date.AddDays(-7);
+            return await List(previousWeekDate, sortExpr);
         }
 
         [HttpGet("list/nextweek")]
-        public async Task<ActionResult<CommonMealsViewModel>> Next(DateTime weekDate)
+        public async Task<ActionResult<CommonMealsViewModel>> Next(DateTime weekDate, string sortExpr = null)
         {
             if (weekDate == null) throw new Exception("Week date missing");
 
-            var numDaysAhead = _commonMealSettings.DefaultDaysToLoad;
-            var numDaysToLoad = _commonMealSettings.DefaultDaysToLoad;
-            var nextWeekDate = weekDate.Date.AddDays(numDaysAhead);
-
-            await _commonMealService.CreateDefaultMeals(nextWeekDate, numDaysToLoad, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultDinnerDates);
-            var commonMeals = await _commonMealService.Load(nextWeekDate, numDaysToLoad);
+            var nextWeekDate = weekDate.Date.AddDays(7);
+            return await List(nextWeekDate, sortExpr);
+        }
+        
+        private static void SortRegistrationsGroups(CommonMealsViewModel meals, string sortExpr)
+        {
+            if (string.IsNullOrWhiteSpace(sortExpr) || meals?.Meals == null)
+                return;
             
-            var result = _commonMealsMapper.Map(commonMeals, nextWeekDate);
-            return result;
+            foreach (var meal in meals.Meals)
+            {
+                meal.RegistrationGroups = meal.RegistrationGroups
+                    .OrderBy(rg => rg.Registrations
+                        .Any(x => x.PersonName.ContainsOrdinalIgnoreCase(sortExpr)) ? "_" + rg.Name : rg.Name)
+                    .ToImmutableList();
+            }
         }
     }
 }

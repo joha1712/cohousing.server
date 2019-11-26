@@ -43,5 +43,11 @@ namespace Cohousing.Server.Util
                 .Select(x => x.Value)
                 .ToImmutableList();
         }
+        
+        public static bool ContainsOrdinalIgnoreCase(this string source, string toCheck, StringComparison comp = StringComparison.OrdinalIgnoreCase)
+        {
+                return source?.IndexOf(toCheck, comp) >= 0;
+        }
+        
     }
 }

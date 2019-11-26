@@ -2,7 +2,6 @@
 using System.Collections.Immutable;
 using System.Linq;
 using Cohousing.Server.Api.ViewModels;
-using Cohousing.Server.Model.Common;
 using Cohousing.Server.Model.Models;
 using Cohousing.Server.Model.Repositories;
 using Cohousing.Server.Util;
