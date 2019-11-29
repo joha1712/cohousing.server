@@ -49,11 +49,11 @@ namespace Cohousing.Server.Api.Controllers
         [HttpGet("list/activeweek")]
         public async Task<ActionResult<CommonMealsViewModel>> List(string sortExpr = "")
         {
-            var startOfWeekDate = _timeProvider.Now.StartOfWeekDate().Date;
+            var startOfWeekDate = _timeProvider.Now().StartOfWeekDate().Date;
             var result = await List(startOfWeekDate, sortExpr);
            
             // Did we get any active meals - if so we are done
-            if (result.Value.Meals.Last().Date > _timeProvider.Now) 
+            if (result.Value.Meals.Last().Date > _timeProvider.Now()) 
                 return result;
             
             // Else fetch next week

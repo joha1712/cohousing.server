@@ -2,8 +2,8 @@
 {
     public class CommonMealChefViewModel
     {
-        public string Id { get; set; }
-        public string PersonId { get; set; }
+        public int Id { get; set; }
+        public int? PersonId { get; set; }
         public string PersonName { get; set; }
     }
 }

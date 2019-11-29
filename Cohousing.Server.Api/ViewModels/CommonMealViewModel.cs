@@ -5,7 +5,7 @@ namespace Cohousing.Server.Api.ViewModels
 {
     public class CommonMealViewModel
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         public DateTime Date { get; set; }
 
         public string DayName { get; set; }

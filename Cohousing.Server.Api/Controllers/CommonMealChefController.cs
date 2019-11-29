@@ -27,7 +27,7 @@ namespace Cohousing.Server.Api.Controllers
         public async Task<ActionResult> UpdateChef(CommonMealChefViewModel chef)
         {
             var chefModel = _commonMealChefMapper.Map(chef);
-            chefModel.Timestamp = _timeProvider.Now;
+            chefModel.Timestamp = _timeProvider.Now();
 
             await _commonMealChefRepository.Update(chefModel);
             return Ok();

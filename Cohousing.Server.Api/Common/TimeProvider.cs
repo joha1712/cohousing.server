@@ -5,7 +5,10 @@ namespace Cohousing.Server.Api.Common
 {
     public class TimeProvider : ITimeProvider
     {
-        public DateTime Now => DateTime.Now;
+        public DateTime Now()
+        {
+            return DateTime.Now;
+        }
 
         public DateTime ToLocal(DateTime utc)
         {

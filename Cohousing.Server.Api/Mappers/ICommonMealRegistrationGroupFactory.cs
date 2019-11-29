@@ -14,16 +14,16 @@ namespace Cohousing.Server.Api.Mappers
 
     public class CommonMealRegistrationGroupFactory : ICommonMealRegistrationGroupFactory
     {
-        private readonly Lazy<ImmutableDictionary<string, int>> _cache;
+        private readonly Lazy<ImmutableDictionary<int, int>> _cache;
 
         public CommonMealRegistrationGroupFactory(IPersonRepository personRepository)
         {
-            _cache = new Lazy<ImmutableDictionary<string, int>>(() =>
+            _cache = new Lazy<ImmutableDictionary<int, int>>(() =>
                 {
                     return personRepository
                         .GetAll()
                         .Result
-                        .ToImmutableDictionary(x => x.Id + "", x => x.AddressId);
+                        .ToImmutableDictionary(x => x.Id, x => x.AddressId);
                 });
         }
 

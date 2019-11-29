@@ -31,9 +31,9 @@ namespace Cohousing.Server.Api.Mappers
 
             return new CommonMealRegistrationViewModel
             {
-                Id = item.Id + "",
+                Id = item.Id,
                 Attending = item.Attending,
-                PersonId = item.PersonId + "",
+                PersonId = item.PersonId,
                 PersonName = person.CallName
             };
         }

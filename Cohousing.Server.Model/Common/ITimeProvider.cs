@@ -4,7 +4,7 @@ namespace Cohousing.Server.Model.Common
 {
     public interface ITimeProvider
     {
-        DateTime Now { get; }
+        DateTime Now();
         DateTime ToLocal(DateTime utc);
     }
 }

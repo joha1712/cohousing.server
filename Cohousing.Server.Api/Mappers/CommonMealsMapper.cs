@@ -35,7 +35,7 @@ namespace Cohousing.Server.Api.Mappers
                 WeekDate = startOfWeekDate,
                 Persons = persons.Select(x => new PersonViewModel
                 {
-                    Id = x.Id + "",
+                    Id = x.Id,
                     Name = x.CallName
                 }).ToImmutableList()
             };

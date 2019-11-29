@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Cohousing.Server.Api.ViewModels;
 using Cohousing.Server.Model.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ namespace Cohousing.Server.Api.Controllers
         [HttpPut("note")]
         public async Task<ActionResult> UpdateNote(CommonMealNoteViewModel note)
         {
-            await _commonMealRepository.UpdateNote(note.Id, note.Note?.Trim());
+            await _commonMealRepository.UpdateNote(Convert.ToInt32(note.Id), note.Note?.Trim());
             return Ok();
         }
     }
