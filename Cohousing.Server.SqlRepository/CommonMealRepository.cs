@@ -68,7 +68,7 @@ namespace Cohousing.Server.SqlRepository
         public async Task<CommonMeal> Add(CommonMeal commonMeal)
         {
             const string query = 
-                " INSERT INTO CommonMeal (Date, Notes) " +
+                " INSERT INTO CommonMeal (Date, Note) " +
                 " VALUES (@Date, @Note) " +
                 " RETURNING id ";
 

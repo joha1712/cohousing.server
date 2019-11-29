@@ -1,11 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Cohousing.Server.Api.Common;
+﻿using System.Threading.Tasks;
+using Cohousing.Server.Api.Mappers;
 using Cohousing.Server.Api.ViewModels;
-using Cohousing.Server.Model.Repositories;
 using Cohousing.Server.Service;
-using Cohousing.Server.Util;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cohousing.Server.Api.Controllers
@@ -14,40 +10,22 @@ namespace Cohousing.Server.Api.Controllers
     [ApiController]
     public class CommonMealShoppingInfoController : ControllerBase
     {
-        private readonly ICommonMealRepository _commonMealRepository;
-        private readonly ITimeFormatter _timeFormatter;
         private readonly ICommonMealShoppingInfoService _commonMealShoppingInfoService;
+        private readonly ICommonMealShoppingInfoMapper _commonMealShoppingInfoMapper;
 
-        public CommonMealShoppingInfoController(ICommonMealRepository commonMealRepository, ITimeFormatter timeFormatter, ICommonMealShoppingInfoService commonMealShoppingInfoService)
+        public CommonMealShoppingInfoController(ICommonMealShoppingInfoService commonMealShoppingInfoService, ICommonMealShoppingInfoMapper commonMealShoppingInfoMapper)
         {
-            _commonMealRepository = commonMealRepository;
-            _timeFormatter = timeFormatter;
             _commonMealShoppingInfoService = commonMealShoppingInfoService;
+            _commonMealShoppingInfoMapper = commonMealShoppingInfoMapper;
         }
 
         // GET api/values
         [HttpGet("shoppinginfo")]
         public async Task<ActionResult<CommonMealShoppingInfoViewModel>> Get(int mealId)
         {
-            var f = _commonMealShoppingInfoService.Load(mealId);
-            
-            var meal = await _commonMealRepository.GetById(mealId);
-
-            var adults = meal.Registrations.Count(x => x.Attending);
-            var children = meal.Registrations.Count(x => x.Attending);
-            var budget = adults * 25;
-            
-            return new CommonMealShoppingInfoViewModel
-            {
-                MealId = meal.Id,
-                Date = meal.Date,
-                DateName = _timeFormatter.GetDateName(meal.Date),
-                DayName = _timeFormatter.GetDayName(meal.Date).ToUpperFirstLetter(),
-                Adults = adults,
-                Children = children,
-                Budget = budget,
-                Amount = null
-            };
+            var shoppingInfo = await _commonMealShoppingInfoService.Load(mealId);
+            var result = await _commonMealShoppingInfoMapper.Map(shoppingInfo);
+            return result;
         }
     }
 }

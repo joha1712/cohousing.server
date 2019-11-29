@@ -6,6 +6,6 @@ namespace Cohousing.Server.Model.Repositories
 {
     public interface ICommonMealExpenseRepository
     {
-        Task<IImmutableList<CommonMealExpense>> GetByMealId(int mealId);
+        Task<IImmutableList<CommonMealExpense>> GetByCommonMealId(int mealId);
     }
 }

@@ -21,14 +21,15 @@ namespace Cohousing.Server.Service
             _timeProvider = timeProvider;
         }
         
-        public async Task<object> Load(int mealId)
+        public async Task<CommonMealShoppingInfo> Load(int mealId)
         {
             // Load the common meal
             var meal = await _commonMealRepository.GetById(mealId);
             
             // Load the existing expenses
-            var expenses = Enumerable.ToDictionary<CommonMealExpense, int, CommonMealExpense>((await _commonMealExpenseRepository
-                    .GetByMealId(mealId)), x => x.PersonId, x => x);
+            var expenses = (await _commonMealExpenseRepository
+                    .GetByCommonMealId(mealId))
+                .ToDictionary(x => x.PersonId, x => x);
             
             // Create missing expenses (each chef should have an expense record):
             var expectedExpenses = meal.Chefs
@@ -44,9 +45,9 @@ namespace Cohousing.Server.Service
                     expenses.Add(expectedExpense,
                         new CommonMealExpense
                         {
-                            Amount = null,
-                            CommonMealId = mealId,
-                            Date = _timeProvider.Now(),
+                            Amount = 0,
+                            MealId = mealId,
+                            Timestamp = _timeProvider.Now(),
                             Id = -1,
                             PersonId = expectedExpense
                         });
@@ -60,10 +61,11 @@ namespace Cohousing.Server.Service
 
             return new CommonMealShoppingInfo
             {
+                MealId = mealId,
+                Adults = adults,
+                Children = children,
                 Expenses = expenses.Values.ToImmutableList(),
                 Budget = budget,
-                Adults = adults,
-                Children = children
             };
         }
     }
