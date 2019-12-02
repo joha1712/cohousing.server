@@ -23,7 +23,7 @@ namespace Cohousing.Server.Api.Mappers
             {
                 Id = item.Id,
                 PersonId = item.PersonId,
-                Amount = item.Amount,
+                Amount = item.Amount ?? 0,
                 MealId = item.MealId,
                 Timestamp = item.Date
             };
@@ -41,7 +41,7 @@ namespace Cohousing.Server.Api.Mappers
             return new CommonMealExpenseViewModel
             {
                 Id = item.Id,
-                Amount = (int) Math.Round(item.Amount, 0),
+                Amount = item.Amount != null ? (int?) Math.Round(item.Amount.Value, 0) : null, 
                 Date = item.Timestamp,
                 MealId = item.MealId,
                 PersonId = item.PersonId,

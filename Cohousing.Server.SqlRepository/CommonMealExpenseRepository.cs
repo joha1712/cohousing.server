@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Linq;
 using System.Threading.Tasks;
 using Cohousing.Server.Model.Models;
 using Cohousing.Server.Model.Repositories;
@@ -29,6 +30,47 @@ namespace Cohousing.Server.SqlRepository
             }
         }
 
+        public async Task Update(CommonMealExpense expense)
+        {
+            const string query =
+                " UPDATE commonMealExpense " +
+                " SET personId = @PersonId, commonMealId = @MealId, date = @Date, amount = @Amount " +
+                " WHERE Id = @Id ";
+
+            using (var connection = _connectionFactory.New())
+            {
+                await connection.QueryAsync(query, new
+                {
+                    Id = expense.Id,
+                    PersonId = expense.PersonId,
+                    MealId = expense.MealId,
+                    Date = expense.Timestamp,
+                    Amount = expense.Amount
+                });
+            }
+        }
+        
+        public async Task<CommonMealExpense> Add(CommonMealExpense expense)
+        {
+            const string query =
+                " INSERT INTO commonMealExpense (personId, date, commonMealId, amount) " +
+                " VALUES (@PersonId, @Date, @MealId, @Amount) " +
+                " RETURNING id ";
+           
+            using (var connection = _connectionFactory.New())
+            {
+                var id = await connection.QueryAsync<int>(query, new
+                {
+                    PersonId = expense.PersonId,
+                    MealId = expense.MealId,
+                    Date = expense.Timestamp,
+                    Amount = expense.Amount
+                });
+
+                expense.Id = id.Single();
+                return expense;
+            }
+        }
 
         public async Task<IImmutableList<CommonMealExpense>> GetByCommonMealId(int commonMealId)
         {

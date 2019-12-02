@@ -7,5 +7,7 @@ namespace Cohousing.Server.Model.Repositories
     public interface ICommonMealExpenseRepository
     {
         Task<IImmutableList<CommonMealExpense>> GetByCommonMealId(int mealId);
+        Task Update(CommonMealExpense expenseModel);
+        Task<CommonMealExpense> Add(CommonMealExpense expenseModel);
     }
 }

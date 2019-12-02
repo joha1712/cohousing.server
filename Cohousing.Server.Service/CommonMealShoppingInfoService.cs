@@ -45,7 +45,7 @@ namespace Cohousing.Server.Service
                     expenses.Add(expectedExpense,
                         new CommonMealExpense
                         {
-                            Amount = 0,
+                            Amount = null,
                             MealId = mealId,
                             Timestamp = _timeProvider.Now(),
                             Id = -1,

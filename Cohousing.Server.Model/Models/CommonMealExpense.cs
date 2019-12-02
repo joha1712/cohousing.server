@@ -8,6 +8,6 @@ namespace Cohousing.Server.Model.Models
         public int PersonId { get; set; }
         public int MealId { get; set; }
         public DateTime Timestamp { get; set; }
-        public decimal Amount { get; set; }
+        public decimal? Amount { get; set; }
     }
 }
