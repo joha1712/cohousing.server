@@ -27,6 +27,7 @@ namespace Cohousing.Server.Api.Mappers
                 MealId = item.MealId,
                 Adults = item.Adults,
                 Children = item.Children,
+                Vegetarians = item.Vegetarians,
                 Budget = item.Children,
                 Expenses = _commonMealExpenseMapper.MapMany(item.Expenses)
             };
@@ -44,6 +45,7 @@ namespace Cohousing.Server.Api.Mappers
                 DayName = _timeFormatter.GetDayName(meal.Date).ToUpperFirstLetter(),
                 Adults = item.Adults,
                 Children = item.Children,
+                Vegetarians = item.Vegetarians,
                 Budget = item.Budget,
                 Expenses = await _commonMealExpenseMapper.MapMany(item.Expenses)
             };

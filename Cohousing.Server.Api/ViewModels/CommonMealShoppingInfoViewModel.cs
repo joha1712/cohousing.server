@@ -12,6 +12,7 @@ namespace Cohousing.Server.Api.ViewModels
         public string DateName { get; set; }
         public int Adults { get; set; }
         public int Children { get; set; }
+        public int Vegetarians { get; set; }
         public int Budget { get; set; }
         public IImmutableList<CommonMealExpenseViewModel> Expenses { get; set; }
     }

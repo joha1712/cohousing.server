@@ -11,4 +11,9 @@ namespace Cohousing.Server.Service
         Task<IImmutableList<CommonMeal>> Load(DateTime date, int numDays);
         Task CreateDefaultMeals(DateTime startDate, int numDays, int numChefs, IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>> defaultMealDates);
     }
+
+    public interface ICommonMealPriceSettings {
+        decimal GetAdultPrice();
+        decimal GetChildPrice();
+    }
 }

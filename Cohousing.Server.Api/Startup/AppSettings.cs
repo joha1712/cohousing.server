@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Cohousing.Server.Model.Repositories;
+using Cohousing.Server.Service;
 using Cohousing.Server.Util;
 using HerokuNpgSql;
 using Microsoft.Extensions.Configuration;
 
 namespace Cohousing.Server.Api.Startup
 {  
-    public class AppSettings : ICommonMealSettings
+    public class AppSettings : ICommonMealSettings, ICommonMealPriceSettings
     {
         private readonly IConfiguration _configuration;
         private readonly Lazy<IImmutableList<KeyValuePair<DayOfWeek,TimeSpan>>> _cachedDefaultDinnerDates;
-        private readonly Lazy<int> _cachedDefaultDaysToLoad;
         private readonly Lazy<int> _cachedNumberOfChefs;
         private readonly Lazy<string> _cachedConnectionString;
+        private readonly Lazy<IImmutableDictionary<string, decimal>> _cachedDinnerPrices;
 
         public AppSettings(IConfiguration configuration, IConfigRepository configRepository)
         {
@@ -29,10 +30,14 @@ namespace Cohousing.Server.Api.Startup
                 return valueAsString != null ? Convert.ToInt32(valueAsString) : 1;
             });
 
-            _cachedDefaultDaysToLoad = new Lazy<int>(() =>
+            _cachedDinnerPrices = new Lazy<IImmutableDictionary<string, decimal>>(() => 
             {
-                var valueAsString = configRepository.GetByKey("CommonMealDefaultDaysToLoad")?.Value;
-                return valueAsString != null ? Convert.ToInt32(valueAsString) : 7;
+                var valueAsString = configRepository.GetByKey("CommonMealDinnerPrices").Value;
+                var valueAsKeyValuePairs = valueAsString.AsKeyValuePairs();
+                return valueAsKeyValuePairs.ToImmutableDictionary(x => x.Key, y => 
+                    {
+                        return Convert.ToDecimal(y.Value.Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
+                    });
             });
 
             _cachedDefaultDinnerDates = new Lazy<IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>>>(() =>
@@ -57,9 +62,28 @@ namespace Cohousing.Server.Api.Startup
         public string ApiUrl => GetApiWebHostUrl(_configuration);
 
         public int NumberOfChefs => _cachedNumberOfChefs.Value;
-        public int DefaultDaysToLoad => _cachedDefaultDaysToLoad.Value;
-
+        
         public IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>> DefaultDinnerDates => _cachedDefaultDinnerDates.Value;
+
+        public decimal GetAdultPrice()
+        {
+            if (_cachedDinnerPrices.Value.ContainsKey("ADULT"))
+                return _cachedDinnerPrices.Value["ADULT"];
+
+            if (_cachedDinnerPrices.Value.ContainsKey("*"))
+                return _cachedDinnerPrices.Value["*"];
+
+            return 0;
+        }
+        public decimal GetChildPrice() {
+            if (_cachedDinnerPrices.Value.ContainsKey("CHILD"))
+                return _cachedDinnerPrices.Value["CHILD"];
+
+            if (_cachedDinnerPrices.Value.ContainsKey("*"))
+                return _cachedDinnerPrices.Value["*"];
+
+            return 0;
+        }
 
         public static string GetConnectionString(IConfiguration configuration)
         {

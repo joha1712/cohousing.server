@@ -37,7 +37,7 @@ namespace Cohousing.Server.Util
                 return new ImmutableArray<KeyValuePair<string, string>>();
 
             return source
-                .Split(",;".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+                .Split(";|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
                 .Select(AsKeyValuePair)
                 .Where(x => x != null)
                 .Select(x => x.Value)

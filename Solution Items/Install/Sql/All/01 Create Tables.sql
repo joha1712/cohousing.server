@@ -14,7 +14,8 @@ CREATE TABLE IF NOT EXISTS person (
 	lastName TEXT COLLATE "da-DK-x-icu" NOT NULL,
 	callName TEXT COLLATE "da-DK-x-icu" NOT NULL,
 	active BOOLEAN NOT NULL DEFAULT true,
-	addressId INT REFERENCES address(id) 
+	addressId INT REFERENCES address(id),
+	attributes TEXT COLLATE "da-DK-x-icu" NULL
 );
 
 CREATE INDEX IF NOT EXISTS idx_person_addressId ON person(addressId);

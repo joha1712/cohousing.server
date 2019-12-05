@@ -9,6 +9,7 @@ namespace Cohousing.Server.Model
         public int Budget { get; set; }
         public int Adults { get; set; }
         public int Children { get; set; }
+        public int Vegetarians { get; set; }
         public IImmutableList<CommonMealExpense> Expenses { get; set; }
     }
 }
