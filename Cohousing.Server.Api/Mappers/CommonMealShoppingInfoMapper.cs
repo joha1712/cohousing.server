@@ -25,10 +25,9 @@ namespace Cohousing.Server.Api.Mappers
             return new CommonMealShoppingInfo
             {
                 MealId = item.MealId,
-                Adults = item.Adults,
-                Children = item.Children,
-                Vegetarians = item.Vegetarians,
-                Budget = item.Children,
+                Adults = new Model.Models.PersonGroup {Total = item.Adults.Total, Vegetarians = item.Adults.Vegetarians },
+                Children = new Model.Models.PersonGroup {Total = item.Children.Total, Vegetarians = item.Children.Vegetarians },
+                Budget = item.Budget,
                 Expenses = _commonMealExpenseMapper.MapMany(item.Expenses)
             };
         }
@@ -43,9 +42,8 @@ namespace Cohousing.Server.Api.Mappers
                 Date = meal.Date,
                 DateName = _timeFormatter.GetDateName(meal.Date),
                 DayName = _timeFormatter.GetDayName(meal.Date).ToUpperFirstLetter(),
-                Adults = item.Adults,
-                Children = item.Children,
-                Vegetarians = item.Vegetarians,
+                Adults = new PersonGroupViewModel{ Total = item.Adults.Total, Vegetarians = item.Adults.Vegetarians },
+                Children =  new PersonGroupViewModel{ Total = item.Children.Total, Vegetarians = item.Children.Vegetarians },
                 Budget = item.Budget,
                 Expenses = await _commonMealExpenseMapper.MapMany(item.Expenses)
             };

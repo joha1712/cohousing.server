@@ -62,17 +62,15 @@ namespace Cohousing.Server.Service
             }
 
             // Create the shopping info
-            var adults = meal.Registrations.Count(x => x.Attending && persons[x.PersonId].IsAdult());
-            var children = meal.Registrations.Count(x => x.Attending && persons[x.PersonId].IsChild());
-            var vegetarians = meal.Registrations.Count(x => x.Attending && persons[x.PersonId].IsAdult() && persons[x.PersonId].IsVegetarian());
-            var budget = (int)Math.Round((adults * _commonMealPriceSettings.GetAdultPrice()) + (children * _commonMealPriceSettings.GetChildPrice()), 0);
+            var adults = meal.Registrations.Where(x => x.Attending && persons[x.PersonId].IsAdult()).ToList();
+            var children = meal.Registrations.Where(x => x.Attending && persons[x.PersonId].IsChild()).ToList();
+            var budget = (int)Math.Round((adults.Count * _commonMealPriceSettings.GetAdultPrice()) + (children.Count * _commonMealPriceSettings.GetChildPrice()), 0);
 
             return new CommonMealShoppingInfo
             {
                 MealId = mealId,
-                Adults = adults,
-                Vegetarians = vegetarians,
-                Children = children,
+                Adults = new PersonGroup { Total = adults.Count, Vegetarians = adults.Count(x => persons[x.PersonId].IsVegetarian())},                
+                Children = new PersonGroup { Total = children.Count, Vegetarians = children.Count(x => persons[x.PersonId].IsVegetarian())},
                 Expenses = expenses.Values.ToImmutableList(),
                 Budget = budget,
             };

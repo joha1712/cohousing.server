@@ -7,9 +7,8 @@ namespace Cohousing.Server.Model
     {
         public int MealId { get; set; }
         public int Budget { get; set; }
-        public int Adults { get; set; }
-        public int Children { get; set; }
-        public int Vegetarians { get; set; }
+        public PersonGroup Adults { get; set; }
+        public PersonGroup Children { get; set; }
         public IImmutableList<CommonMealExpense> Expenses { get; set; }
-    }
+    }    
 }

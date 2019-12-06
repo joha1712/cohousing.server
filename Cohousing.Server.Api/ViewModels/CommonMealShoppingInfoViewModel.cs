@@ -10,10 +10,14 @@ namespace Cohousing.Server.Api.ViewModels
 
         public string DayName { get; set; }
         public string DateName { get; set; }
-        public int Adults { get; set; }
-        public int Children { get; set; }
-        public int Vegetarians { get; set; }
+        public PersonGroupViewModel Adults { get; set; }
+        public PersonGroupViewModel Children { get; set; }
         public int Budget { get; set; }
         public IImmutableList<CommonMealExpenseViewModel> Expenses { get; set; }
+    }
+
+    public class PersonGroupViewModel {
+        public int Total { get; set;}
+        public int Vegetarians { get; set; }
     }
 }
