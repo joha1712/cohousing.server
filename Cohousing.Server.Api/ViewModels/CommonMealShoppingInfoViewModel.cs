@@ -17,7 +17,8 @@ namespace Cohousing.Server.Api.ViewModels
     }
 
     public class PersonGroupViewModel {
-        public int Total { get; set;}
-        public int Vegetarians { get; set; }
+        public int Total => (Conventional ?? 0) + (Vegetarians ?? 0);
+        public int? Conventional { get; set;}
+        public int? Vegetarians { get; set; }
     }
 }

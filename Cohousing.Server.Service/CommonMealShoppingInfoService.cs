@@ -69,8 +69,12 @@ namespace Cohousing.Server.Service
             return new CommonMealShoppingInfo
             {
                 MealId = mealId,
-                Adults = new PersonGroup { Total = adults.Count, Vegetarians = adults.Count(x => persons[x.PersonId].IsVegetarian())},                
-                Children = new PersonGroup { Total = children.Count, Vegetarians = children.Count(x => persons[x.PersonId].IsVegetarian())},
+                Adults = new PersonGroup { 
+                    Conventional = adults.Count(x => !persons[x.PersonId].IsVegetarian()),
+                    Vegetarians = adults.Count(x => persons[x.PersonId].IsVegetarian())},                
+                Children = new PersonGroup { 
+                    Conventional = children.Count(x => !persons[x.PersonId].IsVegetarian()), 
+                    Vegetarians = children.Count(x => persons[x.PersonId].IsVegetarian())},
                 Expenses = expenses.Values.ToImmutableList(),
                 Budget = budget,
             };
