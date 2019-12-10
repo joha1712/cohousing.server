@@ -15,16 +15,14 @@ notifications:
     
 services:
   - postgresql
-addons:
-  postgresql: "11.2"
 
 script:
  - dotnet restore
  - dotnet build
 
 before_deploy:    
-  - psql $PGSQL_CONSTR -f "$TRAVIS_BUILD_DIR/Solution Items/Install/Sql/All/01_Create_Tables.sql"
-  - psql $PGSQL_CONSTR -f "$TRAVIS_BUILD_DIR/Solution Items/Install/Sql/All/02_Modify_Tables.sql"
+  - psql -d $PGSQL_CONSTR -f "$TRAVIS_BUILD_DIR/Solution Items/Install/Sql/All/01_Create_Tables.sql"
+  - psql -d $PGSQL_CONSTR -f "$TRAVIS_BUILD_DIR/Solution Items/Install/Sql/All/02_Modify_Tables.sql"
   - cd Cohousing.Server.Api\bin\Debug\netcoreapp2.1 && zip -rv9 $TRAVIS_PACKAGE_FILE . && cd .. && cd .. && cd .. & cd ..
 deploy:
   - provider: heroku
