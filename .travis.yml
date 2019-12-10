@@ -17,9 +17,13 @@ services:
   - postgresql
 
 script:
- - dotnet restore
- - dotnet build
- - psql -d $POSTGRESQL_CONNECTIONSTRING -f "$TRAVIS_BUILD_DIR/Solution Items/Install/Sql/All/01_Create_Tables.sql" 
+  - echo $POSTGRESQL_CONNECTIONSTRING
+  - echo $PGSQL_CONSTR
+  - echo $TRAVIS_BUILD_DIR
+  - psql -d $POSTGRESQL_CONNECTIONSTRING -f "$TRAVIS_BUILD_DIR/Solution Items/Install/Sql/All/01_Create_Tables.sql" 
+  - dotnet restore
+  - dotnet build
+ 
 
 before_deploy:    
   #- psql -V
