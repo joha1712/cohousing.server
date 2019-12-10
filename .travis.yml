@@ -19,7 +19,7 @@ services:
 script:
  - dotnet restore
  - dotnet build
- - psql -d "$PGSQL_CONSTR" -f "$TRAVIS_BUILD_DIR/Solution Items/Install/Sql/All/01_Create_Tables.sql" 
+ - psql -d $PGSQL_CONSTR -f "$TRAVIS_BUILD_DIR/Solution Items/Install/Sql/All/01_Create_Tables.sql" 
 
 before_deploy:    
   #- psql -V
