@@ -29,15 +29,13 @@ deploy:
   - provider: heroku
     api_key: $HEROKU_TOKEN
     app: buske-server-dev
-    on:
-      repo: joha1712/cohousing.server
+    on:      
       branch: master
       
   - provider: heroku
     api_key: $HEROKU_TOKEN
     app: buske-server-prd
-    on:
-      repo: joha1712/cohousing.server
+    on:      
       branch: release
   
   - provider: releases
@@ -46,8 +44,7 @@ deploy:
     skip_cleanup: true
     name: "v$TRAVIS_PACKAGE_VERSION"
     draft: false
-    on:
-      repo: joha1712/cohousing.server
+    on:      
       branch: release    
 
 after_deploy:
