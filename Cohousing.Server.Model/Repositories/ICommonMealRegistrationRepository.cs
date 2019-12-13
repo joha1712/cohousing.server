@@ -14,6 +14,6 @@ namespace Cohousing.Server.Model.Repositories
 
         Task<IImmutableList<CommonMealRegistration>> AddMany(IImmutableList<CommonMealRegistration> registrations, int commonMealId);
 
-        Task<CommonMealRegistration> Update(CommonMealRegistration registration);
+        Task<CommonMealRegistration> Update(CommonMealRegistration registration);        
     }
 }

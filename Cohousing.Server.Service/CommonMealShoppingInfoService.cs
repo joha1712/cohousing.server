@@ -27,6 +27,7 @@ namespace Cohousing.Server.Service
             _personRepository = personRepository;
         }
 
+        // TODO: Separate Load & Crate like in the CommonMealService
         public async Task<CommonMealShoppingInfo> Load(int mealId)
         {
             // Load the common meal

@@ -18,7 +18,7 @@ namespace Cohousing.Server.Util
             return source[0].ToString().ToUpperInvariant() + source.Substring(1);
         }
 
-        public static IImmutableList<KeyValuePair<string, string>> AsKeyValuePairs(this string source)
+        public static IImmutableList<KeyValuePair<string, string>> AsKeyValuePairs(this string source, string splitOn = ";|")
         {
             KeyValuePair<string, string>? AsKeyValuePair(string s)
             {
@@ -37,7 +37,7 @@ namespace Cohousing.Server.Util
                 return new ImmutableArray<KeyValuePair<string, string>>();
 
             return source
-                .Split(";|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+                .Split(splitOn.ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
                 .Select(AsKeyValuePair)
                 .Where(x => x != null)
                 .Select(x => x.Value)

@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Cohousing.Server.Model\Cohousing.Server.Model.csproj" />
+    <ProjectReference Include="..\Cohousing.Server.Util\Cohousing.Server.Util.csproj" />
   </ItemGroup>
 
 </Project>

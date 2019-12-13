@@ -12,12 +12,14 @@ namespace Cohousing.Server.Api.Mappers
         private readonly ITimeFormatter _timeFormatter;
         private readonly ICommonMealExpenseMapper _commonMealExpenseMapper;
         private readonly ICommonMealRepository _commonMealRepository;
+        private readonly IPersonGroupMapper _personGroupMapper;
 
-        public CommonMealShoppingInfoMapper(ITimeFormatter timeFormatter, ICommonMealExpenseMapper commonMealExpenseMapper, ICommonMealRepository commonMealRepository)
+        public CommonMealShoppingInfoMapper(ITimeFormatter timeFormatter, ICommonMealExpenseMapper commonMealExpenseMapper, ICommonMealRepository commonMealRepository, IPersonGroupMapper personGroupMapper)
         {
             _timeFormatter = timeFormatter;
             _commonMealExpenseMapper = commonMealExpenseMapper;
             _commonMealRepository = commonMealRepository;
+            _personGroupMapper = personGroupMapper;
         }
 
         public CommonMealShoppingInfo Map(CommonMealShoppingInfoViewModel item)
@@ -25,14 +27,8 @@ namespace Cohousing.Server.Api.Mappers
             return new CommonMealShoppingInfo
             {
                 MealId = item.MealId,
-                Adults = new Model.Models.PersonGroup {
-                    Conventional = item.Adults.Conventional ?? 0, 
-                    Vegetarians = item.Adults.Vegetarians ?? 0 
-                },
-                Children = new Model.Models.PersonGroup {
-                    Conventional = item.Children.Conventional ?? 0, 
-                    Vegetarians = item.Children.Vegetarians ?? 0 
-                },
+                Adults = _personGroupMapper.Map(item.Adults),
+                Children = _personGroupMapper.Map(item.Children),
                 Budget = item.Budget,
                 Expenses = _commonMealExpenseMapper.MapMany(item.Expenses)
             };
@@ -48,14 +44,8 @@ namespace Cohousing.Server.Api.Mappers
                 Date = meal.Date,
                 DateName = _timeFormatter.GetDateName(meal.Date),
                 DayName = _timeFormatter.GetDayName(meal.Date).ToUpperFirstLetter(),
-                Adults = new PersonGroupViewModel { 
-                    Conventional = item.Adults.Conventional, 
-                    Vegetarians = item.Adults.Vegetarians 
-                },
-                Children =  new PersonGroupViewModel { 
-                    Conventional = item.Children.Conventional, 
-                    Vegetarians = item.Children.Vegetarians 
-                },
+                Adults = _personGroupMapper.Map(item.Adults),
+                Children =  _personGroupMapper.Map(item.Children),
                 Budget = item.Budget,
                 Expenses = await _commonMealExpenseMapper.MapMany(item.Expenses)
             };
