@@ -15,7 +15,6 @@ namespace Cohousing.Server.Api.Mappers
         public override CommonMealGuestRegistration Map(CommonMealGuestRegistrationViewModel item)
         {
             return new CommonMealGuestRegistration {
-                Id = item.Id,
                 RegistrationId = item.RegistrationId,
                 Adults = _personGroupMapper.Map(item.Adults),
                 Children = _personGroupMapper.Map(item.Children)
@@ -25,7 +24,6 @@ namespace Cohousing.Server.Api.Mappers
         public override CommonMealGuestRegistrationViewModel Map(CommonMealGuestRegistration item)
         {
             return new CommonMealGuestRegistrationViewModel {
-                Id = item.Id,
                 RegistrationId = item.RegistrationId,
                 Adults = _personGroupMapper.Map(item.Adults),
                 Children = _personGroupMapper.Map(item.Children)

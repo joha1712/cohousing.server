@@ -30,37 +30,21 @@ namespace Cohousing.Server.Service
         // TODO: Separate Load & Crate like in the CommonMealService
         public async Task<CommonMealShoppingInfo> Load(int mealId)
         {
-            // Load the common meal
+            // Load the common meal, persons and guest regis
             var meal = await _commonMealRepository.GetById(mealId);
             var persons = (await _personRepository.GetAll()).ToDictionary(x => x.Id, x => x);
 
             // Load the existing expenses
-            var expenses = (await _commonMealExpenseRepository
+            var allExpenses = (await _commonMealExpenseRepository
                     .GetByCommonMealId(mealId))
                 .ToDictionary(x => x.PersonId, x => x);
 
             // Create missing expenses (each chef should have an expense record):
-            var expectedExpenses = meal.Chefs
+            var expenses = meal.Chefs
                 .Where(x => x.PersonId != null)
                 .Select(x => x.PersonId.Value)
+                .Select(x => allExpenses.ContainsKey(x) ? allExpenses[x] : CreateDefaultExpense(x, mealId))
                 .ToImmutableList();
-
-            foreach (var expectedExpense in expectedExpenses)
-            {
-                if (!expenses.ContainsKey(expectedExpense))
-                {
-                    // Create a new expense
-                    expenses.Add(expectedExpense,
-                        new CommonMealExpense
-                        {
-                            Amount = null,
-                            MealId = mealId,
-                            Timestamp = _timeProvider.Now(),
-                            Id = -1,
-                            PersonId = expectedExpense
-                        });
-                }
-            }
 
             // Create the shopping info
             var adults = meal.Registrations.Where(x => x.Attending && persons[x.PersonId].IsAdult()).ToList();
@@ -76,9 +60,20 @@ namespace Cohousing.Server.Service
                 Children = new PersonGroup { 
                     Conventional = children.Count(x => !persons[x.PersonId].IsVegetarian()), 
                     Vegetarians = children.Count(x => persons[x.PersonId].IsVegetarian())},
-                Expenses = expenses.Values.ToImmutableList(),
+                Expenses = expenses.ToImmutableList(),
                 Budget = budget,
             };
+        }
+
+        private CommonMealExpense CreateDefaultExpense(int personId, int mealId) {
+            return new CommonMealExpense
+                {
+                    Amount = null,
+                    MealId = mealId,
+                    Timestamp = _timeProvider.Now(),
+                    Id = -1,
+                    PersonId = personId
+                };
         }
     }
 }

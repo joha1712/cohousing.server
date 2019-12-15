@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 using System.Threading.Tasks;
 using Cohousing.Server.Model.Common;
 using Cohousing.Server.Model.Factories;
 using Cohousing.Server.Model.Models;
 using Cohousing.Server.Model.Repositories;
-using Cohousing.Server.Util;
 
 namespace Cohousing.Server.Service
 {

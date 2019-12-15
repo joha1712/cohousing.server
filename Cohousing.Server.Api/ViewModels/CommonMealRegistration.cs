@@ -7,5 +7,6 @@
         public string PersonName { get; set; }
         public bool Attending { get; set; }
         public int RegNo { get; set; }
+        public CommonMealGuestRegistrationViewModel Guests { get; set; }
     }
 }
