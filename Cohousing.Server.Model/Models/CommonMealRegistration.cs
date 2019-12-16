@@ -7,5 +7,6 @@ namespace Cohousing.Server.Model.Models
         public int Id { get; set; }
         public int PersonId { get; set; }
         public bool Attending { get; set; }
+        public CommonMealGuestRegistration Guests { get; set;}
     }
 }

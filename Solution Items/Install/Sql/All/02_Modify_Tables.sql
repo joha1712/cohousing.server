@@ -1,3 +1,6 @@
 ALTER TABLE commonMeal ADD COLUMN IF NOT EXISTS note TEXT COLLATE "da-DK-x-icu" NULL;
+ALTER TABLE commonMealRegistration ADD COLUMN IF NOT EXISTS guests TEXT COLLATE "da-DK-x-icu" NULL;
 
 ALTER TABLE person ADD COLUMN IF NOT EXISTS attributes TEXT COLLATE "da-DK-x-icu" NULL;
+
+DROP TABLE IF EXISTS commonMealGuestRegistration;

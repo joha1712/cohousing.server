@@ -9,9 +9,11 @@ namespace Cohousing.Server.Api.Mappers
     public class CommonMealRegistrationMapper : MapperBase<CommonMealRegistration, CommonMealRegistrationViewModel>, ICommonMealRegistrationMapper
     {
         private readonly IPersonRepository _personRepository;
+        private readonly ICommonMealGuestRegistrationMapper _commonMealGuestRegistrationMapper;
 
-        public CommonMealRegistrationMapper(IPersonRepository personRepository)
+        public CommonMealRegistrationMapper(IPersonRepository personRepository, ICommonMealGuestRegistrationMapper commonMealGuestRegistrationMapper)
         {
+            _commonMealGuestRegistrationMapper = commonMealGuestRegistrationMapper;
             _personRepository = personRepository;
         }
 
@@ -21,7 +23,8 @@ namespace Cohousing.Server.Api.Mappers
             {
                 Id = Convert.ToInt32(item.Id),
                 Attending = item.Attending,
-                PersonId = Convert.ToInt32(item.PersonId)
+                PersonId = Convert.ToInt32(item.PersonId),
+                Guests = _commonMealGuestRegistrationMapper.Map(item.Guests)
             };
         }
 
@@ -34,7 +37,8 @@ namespace Cohousing.Server.Api.Mappers
                 Id = item.Id,
                 Attending = item.Attending,
                 PersonId = item.PersonId,
-                PersonName = person.CallName
+                PersonName = person.CallName,
+                Guests = _commonMealGuestRegistrationMapper.Map(item.Guests)
             };
         }
     }
