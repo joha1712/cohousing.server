@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
@@ -32,8 +33,7 @@ namespace Cohousing.Server.Service
         {
             // Load the common meal, persons and guest regis
             var meal = await _commonMealRepository.GetById(mealId);
-            var persons = (await _personRepository.GetAll()).ToDictionary(x => x.Id, x => x);
-
+            
             // Load the existing expenses
             var allExpenses = (await _commonMealExpenseRepository
                     .GetByCommonMealId(mealId))
@@ -47,22 +47,50 @@ namespace Cohousing.Server.Service
                 .ToImmutableList();
 
             // Create the shopping info
-            var adults = meal.Registrations.Where(x => x.Attending && persons[x.PersonId].IsAdult()).ToList();
-            var children = meal.Registrations.Where(x => x.Attending && persons[x.PersonId].IsChild()).ToList();
-            var budget = (int)Math.Round((adults.Count * _commonMealPriceSettings.GetAdultPrice()) + (children.Count * _commonMealPriceSettings.GetChildPrice()), 0);
+            var (adults, children) = await CalcMealInfo(meal.Registrations);   
+            var budget = (int)Math.Round((adults.Total * _commonMealPriceSettings.GetAdultPrice()) + (children.Total * _commonMealPriceSettings.GetChildPrice()), 0);
 
             return new CommonMealShoppingInfo
             {
                 MealId = mealId,
-                Adults = new PersonGroup { 
-                    Conventional = adults.Count(x => !persons[x.PersonId].IsVegetarian()),
-                    Vegetarians = adults.Count(x => persons[x.PersonId].IsVegetarian())},                
-                Children = new PersonGroup { 
-                    Conventional = children.Count(x => !persons[x.PersonId].IsVegetarian()), 
-                    Vegetarians = children.Count(x => persons[x.PersonId].IsVegetarian())},
+                Adults = adults,
+                Children = children,
                 Expenses = expenses.ToImmutableList(),
                 Budget = budget,
             };
+        }
+
+        private async Task<(PersonGroup adults, PersonGroup children)> CalcMealInfo(IEnumerable<CommonMealRegistration> registrations) {
+            var adults = new PersonGroup();
+            var chidren = new PersonGroup();
+
+            var personCache = (await _personRepository.GetAll()).ToDictionary(x => x.Id, x => x);
+
+            foreach (var reg in registrations) {
+                adults.Vegetarians += reg.Guests?.Adults.Vegetarians ?? 0;
+                adults.Conventional += reg.Guests?.Adults.Conventional ?? 0;
+                chidren.Vegetarians += reg.Guests?.Children.Vegetarians ?? 0;
+                chidren.Vegetarians += reg.Guests?.Children.Conventional ?? 0;
+
+                if (reg.Attending) {
+                    var person = personCache[reg.PersonId];
+
+                    if (person.IsAdult()) {
+                        if (person.IsVegetarian())
+                            adults.Vegetarians += 1;
+                        else
+                            adults.Conventional += 1;
+                    }
+                    else if (person.IsChild()) {
+                        if (person.IsVegetarian())
+                            chidren.Vegetarians += 1;
+                        else
+                            chidren.Conventional += 1;
+                    }
+                }
+            }
+
+            return (adults, chidren);
         }
 
         private CommonMealExpense CreateDefaultExpense(int personId, int mealId) {

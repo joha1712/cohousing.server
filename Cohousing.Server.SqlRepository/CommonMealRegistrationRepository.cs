@@ -44,7 +44,8 @@ namespace Cohousing.Server.SqlRepository
         {
             const string query = " SELECT id, attending, personid, guests " +
                                  " FROM commonMealRegistration " +
-                                 " WHERE commonMealId = @CommonMealId ";
+                                 " WHERE commonMealId = @CommonMealId " + 
+                                 " ORDER BY personId asc ";
 
             using (var connection = _connectionFactory.New())
             {
@@ -63,7 +64,8 @@ namespace Cohousing.Server.SqlRepository
         public async Task<IImmutableList<CommonMealRegistration>> GetAll()
         {
             const string query = " SELECT id, attending, personId, guests " +
-                                 " FROM CommonMealRegistration ";
+                                 " FROM CommonMealRegistration " +
+                                 " ORDER BY personId asc ";
 
             using (var connection = _connectionFactory.New())
             {
