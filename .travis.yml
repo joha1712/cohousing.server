@@ -7,6 +7,11 @@ env:
     - TRAVIS_PACKAGE_FILE="$TRAVIS_BUILD_DIR/package_v$TRAVIS_PACKAGE_VERSION.zip"    
     - HEROKU_TOKEN=$HEROKU_RELEASETOKEN
     - PGSQL_CONSTR=$POSTGRESQL_CONNECTIONSTRING
+    
+# blacklist
+branches:
+  except:
+    - /untagged-.*/    
       
 notifications:
   email:
@@ -32,6 +37,7 @@ deploy:
     on:
       repo: joha1712/cohousing.server
       branch: master
+
       
   - provider: heroku
     api_key: $HEROKU_TOKEN
