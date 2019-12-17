@@ -20,6 +20,11 @@ namespace Cohousing.Server.Model.Factories
                 Id = -1,
                 Attending = false,
                 PersonId = person.Id,
+                Guests = new CommonMealGuestRegistration {
+                    RegistrationId = -1,
+                    Adults = new PersonGroup(),
+                    Children = new PersonGroup(),
+                }
             };
         }
     }
