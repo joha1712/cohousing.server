@@ -28,8 +28,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tst", "Tst", "{9F068BF2-897
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "All", "All", "{3A13E53C-3D0A-43F3-98CE-24BBBE70EFFE}"
 	ProjectSection(SolutionItems) = preProject
-		Solution Items\Install\Sql\All\01 Create Tables.sql = Solution Items\Install\Sql\All\01 Create Tables.sql
-		Solution Items\Install\Sql\All\02 Modify Tables.sql = Solution Items\Install\Sql\All\02 Modify Tables.sql
+		Solution Items\Install\Sql\All\03_Create_Objects.sql = Solution Items\Install\Sql\All\03_Create_Objects.sql
+		Solution Items\Install\Sql\All\01_Create_Tables.sql = Solution Items\Install\Sql\All\01_Create_Tables.sql
+		Solution Items\Install\Sql\All\02_Modify_Tables.sql = Solution Items\Install\Sql\All\02_Modify_Tables.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Prd", "Prd", "{6D8B4F52-574C-45E9-886C-6EFBE3FC6971}"
@@ -50,6 +51,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utils", "Utils", "{A98764BA-631F-4791-AF6E-1C2050F05B77}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HerokuNpgSql", "Utils\HerokuNpgSql\HerokuNpgSql.csproj", "{DCC2709B-35E4-4C43-A16B-2B982FD3C037}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Loc", "Loc", "{FED53B25-008B-4295-B8E4-0F720E286B0C}"
+ProjectSection(SolutionItems) = preProject
+	Solution Items\Install\Sql\Loc\00 Setup Database.sql = Solution Items\Install\Sql\Loc\00 Setup Database.sql
+EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -113,6 +119,7 @@ Global
 		{6D8B4F52-574C-45E9-886C-6EFBE3FC6971} = {BC5DCAEC-DD09-4F05-B318-CEA486A11391}
 		{F6673B19-EDF4-4AEC-A250-5D770A2ECCA9} = {1673A426-F5D5-47A1-B22D-41F6A8CE83B0}
 		{DCC2709B-35E4-4C43-A16B-2B982FD3C037} = {A98764BA-631F-4791-AF6E-1C2050F05B77}
+		{FED53B25-008B-4295-B8E4-0F720E286B0C} = {BC5DCAEC-DD09-4F05-B318-CEA486A11391}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2A4DDBDE-4A7C-4768-968D-4D02323ACE4E}

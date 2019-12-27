@@ -9,3 +9,4 @@ GRANT USAGE ON SCHEMA public TO "mya.cohousing.sql.user.loc";
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO "mya.cohousing.sql.user.loc";
 GRANT UPDATE ON ALL TABLES IN SCHEMA public TO "mya.cohousing.sql.user.loc";
 GRANT INSERT ON ALL TABLES IN SCHEMA public TO "mya.cohousing.sql.user.loc";
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO "mya.cohousing.sql.user.loc";

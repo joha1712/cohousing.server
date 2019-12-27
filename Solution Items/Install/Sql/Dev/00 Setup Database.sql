@@ -7,3 +7,4 @@ GRANT INSERT, UPDATE, DELETE ON DATABASE "mya.cohousing.sql.dev" TO "mya.cohousi
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO "mya.cohousing.sql.user.dev";
 GRANT UPDATE ON ALL TABLES IN SCHEMA public TO "mya.cohousing.sql.user.dev";
 GRANT INSERT ON ALL TABLES IN SCHEMA public TO "mya.cohousing.sql.user.dev";
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO "mya.cohousing.sql.user.dev";

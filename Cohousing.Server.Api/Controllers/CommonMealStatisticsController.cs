@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
-using Cohousing.Server.Api.Mappers;
 using Cohousing.Server.Api.ViewModels;
-using Cohousing.Server.Model;
 using Cohousing.Server.Model.Common;
-using Cohousing.Server.Model.Repositories;
 using Cohousing.Server.Service;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Cohousing.Server.Api.Mappers;
 using Cohousing.Server.Api.ViewModels;
 using Cohousing.Server.Model.Repositories;
