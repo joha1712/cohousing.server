@@ -5,6 +5,14 @@ namespace Cohousing.Server.Util
 {
     public static class DateExtensions
     {
+        public static DateTime EndOfDay(this DateTime src) {
+            return src.Date.AddDays(1).AddSeconds(-1);
+        } 
+
+        public static DateTime StartOfDay(this DateTime src) {
+            return src.Date;
+        } 
+
         public static DateTime StartOfWeekDate(this DateTime src)
         {
             var dayOfWeek = src.DayOfWeek;

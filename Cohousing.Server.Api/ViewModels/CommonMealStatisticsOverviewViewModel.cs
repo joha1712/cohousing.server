@@ -1,16 +1,13 @@
+using System;
+using System.Collections.Immutable;
+
 namespace Cohousing.Server.Api.ViewModels
 {
-    public class CommonMealStatisticsOverviewViewModel
-    {
-        public int PersonId { get; set;}
-        
-        public string PersonName { get; set; }
-        public int ChefCount { get; set; }
-        public int MealCount { get; set; }
-        public int AdultGuests { get; set; }
-        public int ChildGuests { get; set; }
-        public decimal ExpensesSum { get; set; }
-        public decimal MealCostSum { get; set; }
-        public decimal NettoSum => MealCostSum - ExpensesSum;
+    public class CommonMealStatisticsOverviewViewModel {
+        public string Title {get; set;}
+        public string Subtitle { get; set;}
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set;}
+        public IImmutableList<CommonMealStatisticOverviewViewModel> Rows { get; set; }
     }
 }

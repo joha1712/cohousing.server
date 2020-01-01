@@ -6,6 +6,6 @@ namespace Cohousing.Server.Model.Repositories
 {
     public interface ICommonMealStatisticsRepository
     {
-         Task<IImmutableList<CommonMealStatisticsOverview>> GetOverviewStatistics(DateTime fromDate, DateTime toDate);
+         Task<IImmutableList<CommonMealStatisticOverview>> GetOverviewStatistics(DateTime fromDate, DateTime toDate);
     }
 }

@@ -7,6 +7,6 @@ namespace Cohousing.Server.Service
 {
     public interface ICommonMealStatisticsService
     {
-         Task<IImmutableList<CommonMealStatisticsOverview>> LoadOverview(DateTime fromDate, DateTime toDate);
+         Task<IImmutableList<CommonMealStatisticOverview>> LoadOverview(DateTime fromDate, DateTime toDate);
     }
 }
