@@ -15,8 +15,8 @@ namespace Cohousing.Server.Api.ViewModels
 
         public async Task<CommonMealStatisticsOverviewViewModel> Map(IEnumerable<CommonMealStatisticOverview> items, DateTime fromDate, DateTime toDate) {
             return new CommonMealStatisticsOverviewViewModel {
-                Title = "Buske bofællesskab",
-                Subtitle = "Madplan opgørelse",
+                Title = "Madplan opgørelse",
+                Subtitle = "Buske bofællesskab",
                 FromDate = fromDate,
                 ToDate = toDate,
                 Rows = await _overviewMapper.MapMany(items)

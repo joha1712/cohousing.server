@@ -30,8 +30,8 @@ namespace Cohousing.Server.Api.Mappers
 
             return new CommonMealsViewModel
             {
-                Title = "Buske bofællesskab",
-                Subtitle = $"Madplan - uge {weekNo}",
+                Title = $"Madplan - uge {weekNo}",
+                Subtitle = "Buske bofællesskab",
                 Meals = mappedMeals,
                 WeekDate = startOfWeekDate,
                 Persons = persons.Select(x => new PersonViewModel
