@@ -11,6 +11,8 @@ namespace HerokuNpgSql
         private string _password;
         private bool _pooling;
         private int _port;
+        private int _minPoolSize;
+        private int _maxPoolSize;
         private SslMode _sslMode;
         private bool _trustServerCertificate;
         private string _username;
@@ -59,7 +61,7 @@ namespace HerokuNpgSql
                 _pooling = value;
             }
         }
-
+        
         public int Port
         {
             get => _port;
@@ -67,6 +69,26 @@ namespace HerokuNpgSql
             {
                 base["port"] = value;
                 _port = value;
+            }
+        }
+
+        public int MinPoolSize
+        {
+            get => _minPoolSize;
+            set
+            {
+                base["minpoolsize"] = value;
+                _minPoolSize = value;
+            }
+        }
+        
+        public int MaxPoolSize
+        {
+            get => _maxPoolSize;
+            set
+            {
+                base["maxPoolSize"] = value;
+                _maxPoolSize = value;
             }
         }
 
@@ -135,6 +157,14 @@ namespace HerokuNpgSql
 
                     case "pooling":
                         Pooling = Convert.ToBoolean(value);
+                        break; 
+                    
+                    case "minpoolsize":
+                        MinPoolSize = Convert.ToInt32(value);
+                        break;
+                    
+                    case "maxpoolsize":
+                        MaxPoolSize = Convert.ToInt32(value);
                         break;
 
                     case "trust server certificate":

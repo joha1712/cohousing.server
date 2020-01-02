@@ -92,6 +92,9 @@ namespace Cohousing.Server.Api.Startup
             if (!string.IsNullOrEmpty(herokuConnection))
             {
                 var connection = new HerokuNpgSqlConnectionStringBuilder(herokuConnection);
+                connection["Pooling"] = true;
+                connection["MinPoolSize"] = 0;
+                connection["MaxPoolSize"] = 19;
                 return connection.ConnectionString;
             }
                 
