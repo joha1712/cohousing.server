@@ -28,7 +28,7 @@ namespace Cohousing.Server.Api.Controllers
         public async Task<ActionResult<CommonMealStatisticsOverviewViewModel>> Overview(DateTime? fromDate = null, DateTime? toDate = null)
         {
             var now = _timeProvider.Now();
-            var from = fromDate ?? now.AddDays(-now.Day).AddMonths(-1);
+            var from = fromDate ?? now.AddDays(-now.Day +1).AddMonths(-1);
             var to = toDate ?? now;            
 
             var statistics = await _statisticsService.LoadOverview(from, to);
