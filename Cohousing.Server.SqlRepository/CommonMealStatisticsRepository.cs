@@ -21,7 +21,7 @@ namespace Cohousing.Server.SqlRepository
             _connectionFactory = connectionFactory;            
         }
 
-        public async Task<IImmutableList<CommonMealStatisticsOverview>> GetOverviewStatistics(DateTime fromDate, DateTime toDate)
+        public async Task<IImmutableList<CommonMealStatisticOverview>> GetOverviewStatistics(DateTime fromDate, DateTime toDate)
         {
             const string query = " SELECT personid, chefcount, mealcount, adultguestscount, childguestscount, expensessum " +
                 " FROM commonmeal_statistics_overview(@DateFrom, @DateTo) ";
@@ -29,13 +29,13 @@ namespace Cohousing.Server.SqlRepository
             using (var connection = _connectionFactory.New())
             {
                 var result = (await connection.QueryAsync(query, new { DateFrom = fromDate, DateTo = toDate })).
-                    Select(x => new CommonMealStatisticsOverview {
+                    Select(x => new CommonMealStatisticOverview {
                             PersonId = x.personid,
                             ChefCount = x.chefcount,
                             MealCount = x.mealcount,
                             AdultGuestsCount = x.adultguestscount,
                             ChildGuestsCount = x.childguestscount,
-                            Cost = new CommonMealStatisticsCostSumOverview {
+                            Cost = new CommonMealStatisticCostSumOverview {
                                 ExpensesSum = Convert.ToDecimal(x.expensessum)
                             }                        
                     });                                   

@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Cohousing.Server.Model;
 using Cohousing.Server.Model.Repositories;
+using Cohousing.Server.Util;
 
 namespace Cohousing.Server.Service
 {
@@ -18,7 +19,10 @@ namespace Cohousing.Server.Service
             _commonMealPriceSettings = commonMealPriceSettings;
         }
 
-        public async Task<IImmutableList<CommonMealStatisticsOverview>> LoadOverview(DateTime fromDate, DateTime toDate) {
+        public async Task<IImmutableList<CommonMealStatisticOverview>> LoadOverview(DateTime fromDate, DateTime toDate) {
+            fromDate = fromDate.StartOfDay();
+            toDate = toDate.EndOfDay();
+            
             var result = await _statisticsRepository.GetOverviewStatistics(fromDate, toDate);
             var prices = (await _personRepository.GetAll())
                 .ToImmutableDictionary(x => x.Id, x => x.IsAdult() ? _commonMealPriceSettings.GetAdultPrice() : _commonMealPriceSettings.GetChildPrice());
