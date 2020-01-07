@@ -9,7 +9,8 @@ BEGIN
 			(CAST (SUBSTRING(guests FROM 'ADULTS,CONVENTIONAL\=(.*?);') AS INTEGER) + CAST (SUBSTRING(guests FROM 'ADULTS,VEGETARIAN\=(.*?);') AS INTEGER)) AS adult_guests,
 			(CAST (SUBSTRING(guests FROM 'CHILDREN,CONVENTIONAL\=(.*?);') AS INTEGER) + CAST (SUBSTRING(guests FROM 'CHILDREN,VEGETARIAN\=(.*?);') AS INTEGER)) AS child_guests,
 			CAST(attending AS INTEGER) AS attending,
-			commonmealId
+			commonmealId,
+			(COALESCE((SELECT count(*) FROM commonmealchef WHERE commonmealchef.commonmealId = cmr.commonmealId AND commonmealchef.personId is NOT NULL),0) >= 2) as isValid
 		FROM commonmealRegistration cmr
 	   	INNER JOIN commonMeal on commonMeal.id = cmr.commonMealId
 	   	WHERE commonMeal.date >= fromDate AND commonMeal.date <= toDate
@@ -25,6 +26,7 @@ BEGIN
 					cmc.commonmealId=cte.commonmealId AND cmc.personId = cte.personId
 			) as chefs
 		FROM cte
+		WHERE isValid = true
 	),
 	cte3 AS (
 		SELECT *,
