@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Threading.Tasks;
 using Cohousing.Server.Api.ViewModels;
 using Cohousing.Server.Model.Models;
 using Cohousing.Server.Model.Repositories;
@@ -19,9 +20,10 @@ namespace Cohousing.Server.Api.Mappers
             _commonMealMapper = commonMealMapper;
         }
 
-        public CommonMealsViewModel Map(IImmutableList<CommonMeal> meals, DateTime startOfWeekDate)
+        public async Task<CommonMealsViewModel> Map(IImmutableList<CommonMeal> meals, DateTime startOfWeekDate)
         {
-            var persons = _personRepository.GetAll().Result;
+            var people = await  _personRepository.GetAll();
+            var peopleSorted = people.OrderBy(p => p.IsAdult() ? "First" : "Last").ThenBy(x => x.CallName).ToImmutableList();
             var weekNo = startOfWeekDate.GetIso8601WeekNo().ToString() ?? "{ukendt}";
             var mappedMeals = _commonMealMapper
                 .MapMany(meals)
@@ -34,7 +36,7 @@ namespace Cohousing.Server.Api.Mappers
                 Subtitle = "Buske bofællesskab",
                 Meals = mappedMeals,
                 WeekDate = startOfWeekDate,
-                Persons = persons.Select(x => new PersonViewModel
+                People = peopleSorted.Select(x => new PersonViewModel
                 {
                     Id = x.Id,
                     Name = x.CallName

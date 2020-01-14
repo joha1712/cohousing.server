@@ -39,7 +39,7 @@ namespace Cohousing.Server.Api.Controllers
             await _commonMealService.CreateDefaultMeals(startOfWeekDate, numDaysToLoad, _commonMealSettings.NumberOfChefs, _commonMealSettings.DefaultDinnerDates);
             var commonMeals = await _commonMealService.Load(startOfWeekDate, numDaysToLoad);
             
-            var result = _commonMealsMapper.Map(commonMeals, startOfWeekDate);
+            var result = await _commonMealsMapper.Map(commonMeals, startOfWeekDate);
             SortRegistrationsGroups(result, sortExpr);
             
             return result;
@@ -93,6 +93,6 @@ namespace Cohousing.Server.Api.Controllers
                         .Any(x => x.PersonName.ContainsOrdinalIgnoreCase(sortExpr)) ? "_" + rg.Name : rg.Name)
                     .ToImmutableList();
             }
-        }
+        }               
     }
 }
