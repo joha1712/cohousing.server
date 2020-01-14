@@ -10,6 +10,6 @@ namespace Cohousing.Server.Api.ViewModels
         public DateTime WeekDate { get; set; }
         
         public IImmutableList<CommonMealViewModel> Meals { get; set; }
-        public IImmutableList<PersonViewModel> Persons { get; set; }
+        public IImmutableList<PersonViewModel> People { get; set; }
     }
 }

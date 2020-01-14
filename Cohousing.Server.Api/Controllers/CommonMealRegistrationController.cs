@@ -21,12 +21,12 @@ namespace Cohousing.Server.Api.Controllers
 
         // PUT api/values
         [HttpPut("registrations")]
-        public async Task<ActionResult> UpdateRegistration(CommonMealRegistrationViewModel registration)
+        public async Task<CommonMealRegistrationViewModel> UpdateRegistration(CommonMealRegistrationViewModel registration)
         {
             var reg = _commonMealRegistrationMapper.Map(registration);
-            await _commonMealRegistrationRepository.Update(reg);
+            var result = await _commonMealRegistrationRepository.Update(reg);
 
-            return Ok();
+            return _commonMealRegistrationMapper.Map(result);
         }
     }
 }
