@@ -41,6 +41,7 @@ namespace Cohousing.Server.Api.Controllers
             
             var result = await _commonMealsMapper.Map(commonMeals, startOfWeekDate);
             SortRegistrationsGroups(result, sortExpr);
+            SortPeople(result, sortExpr);
             
             return result;
         }
@@ -93,6 +94,19 @@ namespace Cohousing.Server.Api.Controllers
                         .Any(x => x.PersonName.ContainsOrdinalIgnoreCase(sortExpr)) ? "_" + rg.Name : rg.Name)
                     .ToImmutableList();
             }
+        }         
+
+        private static void SortPeople(CommonMealsViewModel meals, string sortExpr)
+        {
+            if (string.IsNullOrWhiteSpace(sortExpr) || meals?.People == null)
+                return;            
+           
+            meals.People = meals.People
+                .Select((p,idx) => new { Value = p, Idx = idx })
+                .OrderBy(x => x.Value.Name.ContainsOrdinalIgnoreCase(sortExpr) ? -1 : x.Idx)
+                .Select(x => x.Value)
+                .ToImmutableList();
+            
         }               
     }
 }
