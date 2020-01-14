@@ -156,7 +156,7 @@ namespace Cohousing.Server.SqlRepository
                 };
             }
             
-            var lookup = guestsBlob.AsKeyValuePairs(";").ToDictionary(x => x.Key, x => Convert.ToInt32(x.Value));
+            var lookup = guestsBlob.AsKeyValuePairs(";").ToDictionary(x => x.Key, x => int.TryParse(x.Value, out var f) ? f : default(int?));
 
             return new CommonMealGuestRegistration {
                 RegistrationId = regId,

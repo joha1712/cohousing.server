@@ -9,8 +9,8 @@ namespace Cohousing.Server.Model.Models
         public override PersonGroup Map(PersonGroupViewModel item)
         {
             return new PersonGroup { 
-                Conventional = item.Conventional ?? 0, 
-                Vegetarians = item.Vegetarians ?? 0
+                Conventional = item.Conventional, 
+                Vegetarians = item.Vegetarians
             };
         }
 
