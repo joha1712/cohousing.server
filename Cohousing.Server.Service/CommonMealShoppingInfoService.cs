@@ -61,8 +61,8 @@ namespace Cohousing.Server.Service
         }
 
         private async Task<(PersonGroup adults, PersonGroup children)> CalcMealInfo(IEnumerable<CommonMealRegistration> registrations) {
-            var adults = new PersonGroup();
-            var chidren = new PersonGroup();
+            var adults = new PersonGroup { Conventional = 0, Vegetarians = 0};
+            var chidren = new PersonGroup { Conventional = 0, Vegetarians = 0};
 
             var personCache = (await _personRepository.GetAll()).ToDictionary(x => x.Id, x => x);
 
