@@ -24,7 +24,7 @@ namespace Cohousing.Server.SqlRepository
         
         public async Task<IImmutableList<CommonMeal>> GetByDateRange(DateTime dateFrom, DateTime dateTo)
         {
-            const string query = " SELECT Id As Id, Date AS Date, Note As Note " +
+            const string query = " SELECT Id As Id, Date AS Date, Note As Note, Status As Status " +
                                  " FROM CommonMeal " +
                                  " WHERE Date >= @DateFrom AND Date <= @DateTo ";
 
@@ -49,7 +49,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<CommonMeal> GetById(int id)
         {
-            const string query = " SELECT Id As Id, Date AS Date, Note As Note " +
+            const string query = " SELECT Id As Id, Date AS Date, Note As Note, Status As Status " +
                                  " FROM CommonMeal " +
                                  " WHERE Id = @Id ";
 
@@ -68,8 +68,8 @@ namespace Cohousing.Server.SqlRepository
         public async Task<CommonMeal> Add(CommonMeal commonMeal)
         {
             const string query = 
-                " INSERT INTO CommonMeal (Date, Note) " +
-                " VALUES (@Date, @Note) " +
+                " INSERT INTO CommonMeal (Date, Note, Status) " +
+                " VALUES (@Date, @Note, @Status) " +
                 " RETURNING id ";
 
             using (var connection = _connectionFactory.New())
