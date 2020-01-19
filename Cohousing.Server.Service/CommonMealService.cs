@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
-using Cohousing.Server.Model.Common;
 using Cohousing.Server.Model.Factories;
 using Cohousing.Server.Model.Models;
 using Cohousing.Server.Model.Repositories;
@@ -13,18 +12,15 @@ namespace Cohousing.Server.Service
     {
         private readonly ICommonMealRepository _commonMealRepository;
         private readonly CommonMealFactory _commonMealFactory;
-        private readonly ITimeProvider _timeProvider;
 
-        public CommonMealService(ICommonMealRepository commonMealRepository, CommonMealFactory commonMealFactory, ITimeProvider timeProvider)
+        public CommonMealService(ICommonMealRepository commonMealRepository, CommonMealFactory commonMealFactory)
         {
             _commonMealRepository = commonMealRepository;
             _commonMealFactory = commonMealFactory;
-            _timeProvider = timeProvider;
         }
         
         public async Task CreateDefaultMeals(DateTime date, int numDays, int numChefs, IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>> defaultMealDates)
         {
-            var result = new List<CommonMeal>();
             var lookup = defaultMealDates.ToImmutableDictionary(x => x.Key, y => y.Value);
             
             for (var dayIdx=0; dayIdx<numDays; dayIdx++)
@@ -44,8 +40,6 @@ namespace Cohousing.Server.Service
                     meal = await _commonMealFactory.Create(mealDate, numChefs);
                     await _commonMealRepository.Add(meal);
                 }
-
-                result.Add(meal);
             }
         }
 

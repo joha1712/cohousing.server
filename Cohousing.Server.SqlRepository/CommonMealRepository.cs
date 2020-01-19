@@ -65,7 +65,7 @@ namespace Cohousing.Server.SqlRepository
             }
         }
 
-        public async Task<CommonMeal> Add(CommonMeal commonMeal)
+        public async Task<CommonMeal> Add(CommonMeal commonMeal) 
         {
             const string query = 
                 " INSERT INTO CommonMeal (Date, Note, Status) " +
@@ -78,7 +78,7 @@ namespace Cohousing.Server.SqlRepository
                 commonMeal.Id = output.SingleOrDefault();
 
                 // Add common meal registrations
-                commonMeal.Registrations = await _commonMealRegistrationRepository.AddMany(commonMeal.Registrations, commonMeal.Id);
+                commonMeal.Registrations = await _commonMealRegistrationRepository.AddMany(commonMeal.Registrations);
                 commonMeal.Chefs = await _commonMealChefRepository.AddMany(commonMeal.Chefs, commonMeal.Id);
 
                 return commonMeal;
@@ -95,6 +95,32 @@ namespace Cohousing.Server.SqlRepository
             using (var connection = _connectionFactory.New())
             {
                 await connection.QueryAsync(query, new { Id = id, Note = note });
+            }
+        }
+        
+        public async Task UpdateStatus(int id, string status)
+        {
+            const string query = 
+                " UPDATE CommonMeal " +
+                " SET Status = @Status " +
+                " WHERE Id = @Id ";
+
+            using (var connection = _connectionFactory.New())
+            {
+                await connection.QueryAsync(query, new { Id = id, Status = status });
+            }
+        }
+        
+        public async Task<string> GetStatus(int id)
+        {
+            const string query = " SELECT Status As Status " +
+                                 " FROM CommonMeal " +
+                                 " WHERE Id = @Id ";
+
+            using (var connection = _connectionFactory.New())
+            {
+                var status = await connection.ExecuteScalarAsync<string>(query, new { Id = id });
+                return status;
             }
         }
     }

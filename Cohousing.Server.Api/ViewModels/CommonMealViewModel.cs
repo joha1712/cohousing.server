@@ -12,7 +12,7 @@ namespace Cohousing.Server.Api.ViewModels
         public string DateName { get; set; }
         public bool IsActiveMeal { get; set; }
         public string Note { get; set; }
-        public bool IsMealOpen { get; set; }
+        public string Status { get; set; }
 
         public IImmutableList<CommonMealRegistrationGroupViewModel> RegistrationGroups { get; set; }
         public IImmutableList<CommonMealChefViewModel> Chefs { get; set; }

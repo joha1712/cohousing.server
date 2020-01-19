@@ -1,3 +1,7 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+
+-- noinspection SqlDialectInspectionForFile
+
 ALTER TABLE commonMeal ADD COLUMN IF NOT EXISTS note TEXT COLLATE "da-DK-x-icu" NULL;
 ALTER TABLE commonMeal ADD COLUMN IF NOT EXISTS status TEXT COLLATE "da-DK-x-icu" NOT NULL DEFAULT 'OPEN';
 ALTER TABLE commonMealRegistration ADD COLUMN IF NOT EXISTS guests TEXT COLLATE "da-DK-x-icu" NULL;

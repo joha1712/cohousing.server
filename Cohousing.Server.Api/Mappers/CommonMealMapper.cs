@@ -38,7 +38,7 @@ namespace Cohousing.Server.Api.Mappers
                 DayName = _timeFormatter.GetDayName(item.Date).ToUpperFirstLetter(),
                 Note = item.Note,
                 IsActiveMeal = _timeProvider.Now().Date == item.Date.Date,
-                IsMealOpen = item.Status == "OPEN",
+                Status = item.Status,
                 RegistrationGroups = _registrationGroupFactory.CreateGroups(registrations),
                 Chefs = _commonMealChefMapper.MapMany(item.Chefs)
             };
@@ -57,7 +57,7 @@ namespace Cohousing.Server.Api.Mappers
                 Id = Convert.ToInt32(item.Id),
                 Date = item.Date,
                 Registrations = _commonMealRegistrationMapper.MapMany(registrations),
-                Status = item.IsMealOpen ? "OPEN" : "CLOSED"
+                Status = item.Status,
             };
         }
 

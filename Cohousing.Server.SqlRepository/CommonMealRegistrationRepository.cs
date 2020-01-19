@@ -22,7 +22,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<CommonMealRegistration> GetById(int id)
         {
-            const string query = " SELECT id, attending, personId, guests " +
+            const string query = " SELECT id, attending, personId, guests, commonmealid " +
                                  " FROM commonMealRegistration " +
                                  " WHERE id = @Id ";
 
@@ -33,6 +33,7 @@ namespace Cohousing.Server.SqlRepository
                         Id = row.id,
                         Attending = row.attending,
                         PersonId = row.personid,
+                        CommonMealId = row.commonmealid,
                         Guests = MapGuests(row.guests, row.id)
                     }); 
                 var result = registrations.SingleOrDefault();                
@@ -42,7 +43,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<IImmutableList<CommonMealRegistration>> GetByCommonMealId(int commonMealId)
         {
-            const string query = " SELECT id, attending, personid, guests " +
+            const string query = " SELECT id, attending, personid, guests, commonmealid " +
                                  " FROM commonMealRegistration " +
                                  " WHERE commonMealId = @CommonMealId " + 
                                  " ORDER BY personId asc ";
@@ -54,6 +55,7 @@ namespace Cohousing.Server.SqlRepository
                         Id = row.id,
                         Attending = row.attending,
                         PersonId = row.personid,
+                        CommonMealId = row.commonmealid,
                         Guests = MapGuests(row.guests, row.id)
                     });                
                 
@@ -63,7 +65,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<IImmutableList<CommonMealRegistration>> GetAll()
         {
-            const string query = " SELECT id, attending, personId, guests " +
+            const string query = " SELECT id, attending, personId, guests, commonmealid " +
                                  " FROM CommonMealRegistration " +
                                  " ORDER BY personId asc ";
 
@@ -74,6 +76,7 @@ namespace Cohousing.Server.SqlRepository
                         Id = row.id,
                         Attending = row.attending,
                         PersonId = row.personid,
+                        CommonMealId = row.commonmealid,
                         Guests = MapGuests(row.guests, row.id)
                     });
                
@@ -81,7 +84,7 @@ namespace Cohousing.Server.SqlRepository
             }
         }
 
-        public async Task<CommonMealRegistration> Add(CommonMealRegistration registration, int commonMealId)
+        public async Task<CommonMealRegistration> Add(CommonMealRegistration registration)
         {
             const string query =
                 " INSERT INTO commonMealRegistration (personId, commonMealId, attending, guests) " +
@@ -94,7 +97,7 @@ namespace Cohousing.Server.SqlRepository
                 {
                     PersonId = registration.PersonId,
                     Attending = registration.Attending,
-                    CommonMealId = commonMealId,
+                    CommonMealId = registration.CommonMealId,
                     Guests = MapToGuestString(registration.Guests)
                 });
 
@@ -104,11 +107,11 @@ namespace Cohousing.Server.SqlRepository
             }
         }
 
-        public async Task<IImmutableList<CommonMealRegistration>> AddMany(IImmutableList<CommonMealRegistration> registrations, int commonMealId)
+        public async Task<IImmutableList<CommonMealRegistration>> AddMany(IImmutableList<CommonMealRegistration> registrations)
         {
             foreach (var registration in registrations)
             {
-                await Add(registration, commonMealId);
+                await Add(registration);
             }
 
             return registrations;
