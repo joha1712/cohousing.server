@@ -25,6 +25,7 @@ namespace Cohousing.Server.Api.Mappers
                 CommonMealId = item.CommonMealId,
                 Attending = item.Attending,
                 PersonId = Convert.ToInt32(item.PersonId),
+                Timestamp = DateTime.MinValue,
                 Guests = _commonMealGuestRegistrationMapper.Map(item.Guests)
             };
         }

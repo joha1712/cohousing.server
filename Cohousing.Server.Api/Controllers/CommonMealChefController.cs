@@ -3,6 +3,7 @@ using Cohousing.Server.Api.Mappers;
 using Cohousing.Server.Api.ViewModels;
 using Cohousing.Server.Model.Common;
 using Cohousing.Server.Model.Repositories;
+using Cohousing.Server.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cohousing.Server.Api.Controllers
@@ -12,14 +13,12 @@ namespace Cohousing.Server.Api.Controllers
     public class CommonMealChefController : ControllerBase
     {
         private readonly ICommonMealChefMapper _commonMealChefMapper;
-        private readonly ICommonMealChefRepository _commonMealChefRepository;
-        private readonly ITimeProvider _timeProvider;
+        private readonly ICommonMealChefService _commonMealChefService;        
 
-        public CommonMealChefController(ICommonMealChefMapper commonMealChefMapper, ICommonMealChefRepository commonMealChefRepository, ITimeProvider timeProvider)
+        public CommonMealChefController(ICommonMealChefMapper commonMealChefMapper, ICommonMealChefService commonMealChefService)
         {
             _commonMealChefMapper = commonMealChefMapper;
-            _commonMealChefRepository = commonMealChefRepository;
-            _timeProvider = timeProvider;
+            _commonMealChefService = commonMealChefService;            
         }
 
         // PUT api/values
@@ -27,9 +26,7 @@ namespace Cohousing.Server.Api.Controllers
         public async Task<ActionResult> UpdateChef(CommonMealChefViewModel chef)
         {
             var chefModel = _commonMealChefMapper.Map(chef);
-            chefModel.Timestamp = _timeProvider.Now();
-
-            await _commonMealChefRepository.Update(chefModel);
+            await _commonMealChefService.UpdateChef(chefModel);
             return Ok();
         }
     }

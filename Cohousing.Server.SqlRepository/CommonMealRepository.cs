@@ -79,7 +79,7 @@ namespace Cohousing.Server.SqlRepository
 
                 // Add common meal registrations
                 commonMeal.Registrations = await _commonMealRegistrationRepository.AddMany(commonMeal.Registrations);
-                commonMeal.Chefs = await _commonMealChefRepository.AddMany(commonMeal.Chefs, commonMeal.Id);
+                commonMeal.Chefs = await _commonMealChefRepository.AddMany(commonMeal.Chefs);
 
                 return commonMeal;
             }

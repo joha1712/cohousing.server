@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +21,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<CommonMealRegistration> GetById(int id)
         {
-            const string query = " SELECT id, attending, personId, guests, commonmealid " +
+            const string query = " SELECT id, attending, personId, guests, commonmealid, date " +
                                  " FROM commonMealRegistration " +
                                  " WHERE id = @Id ";
 
@@ -34,6 +33,7 @@ namespace Cohousing.Server.SqlRepository
                         Attending = row.attending,
                         PersonId = row.personid,
                         CommonMealId = row.commonmealid,
+                        Timestamp = row.date,
                         Guests = MapGuests(row.guests, row.id)
                     }); 
                 var result = registrations.SingleOrDefault();                
@@ -43,7 +43,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<IImmutableList<CommonMealRegistration>> GetByCommonMealId(int commonMealId)
         {
-            const string query = " SELECT id, attending, personid, guests, commonmealid " +
+            const string query = " SELECT id, attending, personid, guests, commonmealid, date " +
                                  " FROM commonMealRegistration " +
                                  " WHERE commonMealId = @CommonMealId " + 
                                  " ORDER BY personId asc ";
@@ -56,6 +56,7 @@ namespace Cohousing.Server.SqlRepository
                         Attending = row.attending,
                         PersonId = row.personid,
                         CommonMealId = row.commonmealid,
+                        Timestamp = row.date,
                         Guests = MapGuests(row.guests, row.id)
                     });                
                 
@@ -65,7 +66,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<IImmutableList<CommonMealRegistration>> GetAll()
         {
-            const string query = " SELECT id, attending, personId, guests, commonmealid " +
+            const string query = " SELECT id, attending, personId, guests, commonmealid, date " +
                                  " FROM CommonMealRegistration " +
                                  " ORDER BY personId asc ";
 
@@ -77,6 +78,7 @@ namespace Cohousing.Server.SqlRepository
                         Attending = row.attending,
                         PersonId = row.personid,
                         CommonMealId = row.commonmealid,
+                        Timestamp = row.date,
                         Guests = MapGuests(row.guests, row.id)
                     });
                
@@ -87,8 +89,8 @@ namespace Cohousing.Server.SqlRepository
         public async Task<CommonMealRegistration> Add(CommonMealRegistration registration)
         {
             const string query =
-                " INSERT INTO commonMealRegistration (personId, commonMealId, attending, guests) " +
-                " VALUES (@PersonId, @CommonMealId, @Attending, @Guests) " +
+                " INSERT INTO commonMealRegistration (personId, commonMealId, attending, guests, date) " +
+                " VALUES (@PersonId, @CommonMealId, @Attending, @Guests, @Date) " +
                 " RETURNING id ";
 
             using (var connection = _connectionFactory.New())
@@ -98,6 +100,7 @@ namespace Cohousing.Server.SqlRepository
                     PersonId = registration.PersonId,
                     Attending = registration.Attending,
                     CommonMealId = registration.CommonMealId,
+                    Date = registration.Timestamp,
                     Guests = MapToGuestString(registration.Guests)
                 });
 
@@ -121,7 +124,7 @@ namespace Cohousing.Server.SqlRepository
         {
             const string query =
                 " UPDATE CommonMealRegistration " +
-                " SET personId = @PersonId, attending = @Attending, guests = @Guests " +
+                " SET personId = @PersonId, attending = @Attending, guests = @Guests, date = @Date " +
                 " WHERE Id = @Id ";
 
             using (var connection = _connectionFactory.New())
@@ -131,6 +134,7 @@ namespace Cohousing.Server.SqlRepository
                     Id = registration.Id,
                     PersonId = registration.PersonId,
                     Attending = registration.Attending,
+                    Date =  registration.Timestamp,
                     Guests = MapToGuestString(registration.Guests)
                 });
 
