@@ -19,7 +19,8 @@ namespace Cohousing.Server.Api.Mappers
         {
             return new CommonMealChef
             {
-                Id = item.Id,
+                Id = item.Id,                
+                CommonMealId = item.CommonMealId,
                 PersonId = item.PersonId,
                 Timestamp = DateTime.MinValue,
             };
@@ -34,6 +35,7 @@ namespace Cohousing.Server.Api.Mappers
             return new CommonMealChefViewModel
             {
                 Id = item.Id,
+                CommonMealId = item.CommonMealId,
                 PersonId = person?.Id,
                 PersonName = person?.FirstName
             };

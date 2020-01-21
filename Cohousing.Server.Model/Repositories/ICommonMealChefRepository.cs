@@ -10,8 +10,8 @@ namespace Cohousing.Server.Model.Repositories
         Task<CommonMealChef> GetById(int id);
         Task<IImmutableList<CommonMealChef>> GetAll();
 
-        Task<IImmutableList<CommonMealChef>> AddMany(IImmutableList<CommonMealChef> chefs, int commonMealId);
-        Task<CommonMealChef> Add(CommonMealChef chef, int commonMealId);
+        Task<IImmutableList<CommonMealChef>> AddMany(IImmutableList<CommonMealChef> chefs);
+        Task<CommonMealChef> Add(CommonMealChef chef);
         Task<CommonMealChef> Update(CommonMealChef chef);
     }
 }

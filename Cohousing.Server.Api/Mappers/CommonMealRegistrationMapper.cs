@@ -22,8 +22,10 @@ namespace Cohousing.Server.Api.Mappers
             return new CommonMealRegistration
             {
                 Id = Convert.ToInt32(item.Id),
+                CommonMealId = item.CommonMealId,
                 Attending = item.Attending,
                 PersonId = Convert.ToInt32(item.PersonId),
+                Timestamp = DateTime.MinValue,
                 Guests = _commonMealGuestRegistrationMapper.Map(item.Guests)
             };
         }
@@ -35,6 +37,7 @@ namespace Cohousing.Server.Api.Mappers
             return new CommonMealRegistrationViewModel
             {
                 Id = item.Id,
+                CommonMealId = item.CommonMealId,
                 Attending = item.Attending,
                 PersonId = item.PersonId,
                 PersonName = person.CallName,

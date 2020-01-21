@@ -2,6 +2,7 @@
 using Cohousing.Server.Api.Mappers;
 using Cohousing.Server.Api.ViewModels;
 using Cohousing.Server.Model.Repositories;
+using Cohousing.Server.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cohousing.Server.Api.Controllers
@@ -11,12 +12,12 @@ namespace Cohousing.Server.Api.Controllers
     public class CommonMealRegistrationController : ControllerBase
     {
         private readonly ICommonMealRegistrationMapper _commonMealRegistrationMapper;
-        private readonly ICommonMealRegistrationRepository _commonMealRegistrationRepository;
+        private readonly ICommonMealRegistrationService _commonMealRegistrationService;
 
-        public CommonMealRegistrationController(ICommonMealRegistrationMapper commonMealRegistrationMapper, ICommonMealRegistrationRepository commonMealRegistrationRepository)
+        public CommonMealRegistrationController(ICommonMealRegistrationMapper commonMealRegistrationMapper, ICommonMealRegistrationService commonMealRegistrationService)
         {
             _commonMealRegistrationMapper = commonMealRegistrationMapper;
-            _commonMealRegistrationRepository = commonMealRegistrationRepository;
+            _commonMealRegistrationService = commonMealRegistrationService;
         }
 
         // PUT api/values
@@ -24,7 +25,7 @@ namespace Cohousing.Server.Api.Controllers
         public async Task<CommonMealRegistrationViewModel> UpdateRegistration(CommonMealRegistrationViewModel registration)
         {
             var reg = _commonMealRegistrationMapper.Map(registration);
-            var result = await _commonMealRegistrationRepository.Update(reg);
+            var result = await _commonMealRegistrationService.UpdateRegistration(reg);
 
             return _commonMealRegistrationMapper.Map(result);
         }
