@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using Cohousing.Server.Model.Common;
 using Cohousing.Server.Model.Models;
 
 namespace Cohousing.Server.Model.Factories
 {
     public class CommonMealChefFactory
     {
+        private readonly ITimeProvider _timeProvider;
+
+        public CommonMealChefFactory(ITimeProvider timeProvider) {
+            _timeProvider = timeProvider;
+        }
+
         public IImmutableList<CommonMealChef> CreateMany(int numChefs)
         {
             var result = new List<CommonMealChef>();
@@ -23,7 +30,7 @@ namespace Cohousing.Server.Model.Factories
         {
             return new CommonMealChef
             {
-                Timestamp = DateTime.Now,
+                Timestamp = _timeProvider.Now(),
                 PersonId = null
             };
         }

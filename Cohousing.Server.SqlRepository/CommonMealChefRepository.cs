@@ -20,7 +20,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<CommonMealChef> GetById(int id)
         {
-            const string query = " SELECT id As Id, personId AS PersonId, date AS Timestamp " +
+            const string query = " SELECT id As Id, personId AS PersonId, date AS Timestamp, commonMealId AS CommonMealId " +
                                  " FROM CommonMealChef " +
                                  " WHERE Id = @Id ";
 
@@ -32,7 +32,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<IImmutableList<CommonMealChef>> GetAll()
         {
-            const string query = " SELECT id AS Id, personId AS PersonId, date AS Timestamp " +
+            const string query = " SELECT id AS Id, personId AS PersonId, date AS Timestamp, commonMealId AS CommonMealId " +
                                  " FROM CommonMealChef ";
 
             using (var connection = _connectionFactory.New())
@@ -42,17 +42,17 @@ namespace Cohousing.Server.SqlRepository
             }
         }
 
-        public async Task<IImmutableList<CommonMealChef>> AddMany(IImmutableList<CommonMealChef> chefs, int commonMealId)
+        public async Task<IImmutableList<CommonMealChef>> AddMany(IImmutableList<CommonMealChef> chefs)
         {
             foreach (var chef in chefs)
             {
-                await Add(chef, commonMealId);
+                await Add(chef);
             }
 
             return chefs;
         }
 
-        public async Task<CommonMealChef> Add(CommonMealChef commonMealChef, int commonMealId)
+        public async Task<CommonMealChef> Add(CommonMealChef commonMealChef)
         {
             const string query =
                 " INSERT INTO CommonMealChef (personId, date, commonMealId) " +
@@ -65,7 +65,7 @@ namespace Cohousing.Server.SqlRepository
                 {
                     PersonId = commonMealChef.PersonId,
                     Date = commonMealChef.Timestamp,
-                    CommonMealId = commonMealId
+                    CommonMealId = commonMealChef.CommonMealId
                 });
 
                 commonMealChef.Id = id.Single();
@@ -75,7 +75,7 @@ namespace Cohousing.Server.SqlRepository
 
         public async Task<IImmutableList<CommonMealChef>> GetByCommonMealId(int commonMealId)
         {
-            const string query = " SELECT id AS id, personId AS personId, date AS Timestamp " +
+            const string query = " SELECT id AS id, personId AS personId, date AS Timestamp, commonMealId AS CommonMealId " +
                                  " FROM CommonMealChef " +
                                  " WHERE CommonMealId = @CommonMealId ";
 

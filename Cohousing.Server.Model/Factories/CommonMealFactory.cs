@@ -28,7 +28,8 @@ namespace Cohousing.Server.Model.Factories
                 Date = date,
                 Registrations = _commonMealRegistrationFactory.CreateMany(persons),
                 Chefs = _commonMealChefFactory.CreateMany(numChefs),
-                Note = null
+                Note = null,
+                Status = "OPEN"
             };
         }
     }
