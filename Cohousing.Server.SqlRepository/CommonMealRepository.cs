@@ -74,7 +74,7 @@ namespace Cohousing.Server.SqlRepository
 
             using (var connection = _connectionFactory.New())
             {
-                var output = await connection.QueryAsync<int>(query, new { Date = commonMeal.Date, Note = commonMeal.Note });
+                var output = await connection.QueryAsync<int>(query, new { Date = commonMeal.Date, Note = commonMeal.Note, Status = commonMeal.Status });
                 commonMeal.Id = output.SingleOrDefault();
 
                 // Add common meal registrations
