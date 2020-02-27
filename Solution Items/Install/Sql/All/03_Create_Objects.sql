@@ -6,8 +6,8 @@ BEGIN
    WITH cte AS (
 		SELECT 
 			cmr.personId, 
-			(CAST (SUBSTRING(guests FROM 'ADULTS,CONVENTIONAL\=(.*?);') AS INTEGER) + CAST (SUBSTRING(guests FROM 'ADULTS,VEGETARIAN\=(.*?);') AS INTEGER)) AS adult_guests,
-			(CAST (SUBSTRING(guests FROM 'CHILDREN,CONVENTIONAL\=(.*?);') AS INTEGER) + CAST (SUBSTRING(guests FROM 'CHILDREN,VEGETARIAN\=(.*?);') AS INTEGER)) AS child_guests,
+			(CAST(COALESCE(NULLIF(SUBSTRING(guests FROM 'ADULTS,CONVENTIONAL\=(.*?);'),''),'0') AS INTEGER) + CAST(COALESCE(NULLIF(SUBSTRING(guests FROM 'ADULTS,VEGETARIAN\=(.*?);'),''),'0') AS INTEGER)) AS adult_guests,
+			(CAST(COALESCE(NULLIF(SUBSTRING(guests FROM 'CHILDREN,CONVENTIONAL\=(.*?);'),''),'0') AS INTEGER) + CAST(COALESCE(NULLIF(SUBSTRING(guests FROM 'CHILDREN,VEGETARIAN\=(.*?);'),''),'0') AS INTEGER)) AS child_guests,
 			CAST(attending AS INTEGER) AS attending,
 			commonmealId,
 			(COALESCE((SELECT count(*) FROM commonmealchef WHERE commonmealchef.commonmealId = cmr.commonmealId AND commonmealchef.personId is NOT NULL),0) >= 2) as isValid
