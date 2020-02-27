@@ -74,8 +74,25 @@ namespace Cohousing.Server.SqlRepository
 
             using (var connection = _connectionFactory.New())
             {
-                var output = await connection.QueryAsync<int>(query, new { Date = commonMeal.Date, Note = commonMeal.Note });
+                var output = await connection.QueryAsync<int>(query, new { Date = commonMeal.Date, Note = commonMeal.Note, Status = commonMeal.Status });
+                
+                // Update common meal id:
                 commonMeal.Id = output.SingleOrDefault();
+                if (commonMeal.Registrations != null)
+                {
+                    foreach (var reg in commonMeal.Registrations)
+                    {
+                        reg.CommonMealId = commonMeal.Id;
+                    }
+                }
+                
+                if (commonMeal.Chefs != null)
+                {
+                    foreach (var chef in commonMeal.Chefs)
+                    {
+                        chef.CommonMealId = commonMeal.Id;
+                    }
+                }
 
                 // Add common meal registrations
                 commonMeal.Registrations = await _commonMealRegistrationRepository.AddMany(commonMeal.Registrations);

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -38,7 +39,12 @@ namespace Cohousing.Server.Api.Startup
                 options.RequestCultureProviders = null;
             });
 
-            services.AddResponseCompression();
+            // Add GZIP response compression
+            services.AddResponseCompression(options =>
+            {
+                options.EnableForHttps = true;
+                options.Providers.Add<GzipCompressionProvider>();
+            });
 
             services
                 .AddMvc()
@@ -73,6 +79,7 @@ namespace Cohousing.Server.Api.Startup
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseForwardedHeaders();
+            app.UseResponseCompression();
             
             if (env.IsDevelopment())
             {
