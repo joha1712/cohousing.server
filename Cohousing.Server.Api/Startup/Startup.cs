@@ -40,11 +40,12 @@ namespace Cohousing.Server.Api.Startup
             });
 
             // Add GZIP response compression
-            services.AddResponseCompression(options =>
+            /*services.AddResponseCompression(options =>
             {
                 options.EnableForHttps = true;
                 options.Providers.Add<GzipCompressionProvider>();
             });
+            */
 
             services
                 .AddMvc()
@@ -89,7 +90,7 @@ namespace Cohousing.Server.Api.Startup
             app.UseRequestLocalization();
             app.UseHttpsRedirection();
 
-            app.UseResponseCompression();
+            //app.UseResponseCompression();
 
             app.UseCors(builder => builder
                 .AllowAnyOrigin()
