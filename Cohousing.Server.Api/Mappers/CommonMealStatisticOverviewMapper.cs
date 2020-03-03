@@ -20,7 +20,19 @@ namespace Cohousing.Server.Api.Mappers
         public async Task<CommonMealStatisticOverviewViewModel> Map(CommonMealStatisticOverview item)
         {           
             var person = await _personRepository.GetById(item.PersonId);
+            return Map(item, person);
+        } 
 
+        public async Task<IImmutableList<CommonMealStatisticOverviewViewModel>> MapMany(IEnumerable<CommonMealStatisticOverview> items) {
+            var persons = await _personRepository.GetAll();
+            var personLookup = persons.ToDictionary(x => x.Id, x => x);
+            
+            var result = items.Select(x => Map(x, personLookup[x.PersonId]));
+            return result.ToImmutableList();
+        }
+
+        private CommonMealStatisticOverviewViewModel Map(CommonMealStatisticOverview item, Model.Models.Person person)
+        {
             return new CommonMealStatisticOverviewViewModel {
                 PersonId = item.PersonId,
                 PersonName = person.CallName,
@@ -31,11 +43,6 @@ namespace Cohousing.Server.Api.Mappers
                 MealCostSum = item.Cost.MealCostSum,
                 ExpensesSum = item.Cost.ExpensesSum
             };
-        } 
-
-        public async Task<IImmutableList<CommonMealStatisticOverviewViewModel>> MapMany(IEnumerable<CommonMealStatisticOverview> items) {
-            var tasks = await Task.WhenAll(items.Select(Map));
-            return tasks.ToImmutableList();
-        }        
+        }
     }
 }
