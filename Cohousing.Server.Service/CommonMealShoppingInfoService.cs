@@ -35,16 +35,17 @@ namespace Cohousing.Server.Service
             var meal = await _commonMealRepository.GetById(mealId);
             
             // Load the existing expenses
-            var allExpenses = (await _commonMealExpenseRepository
+            var expenses = (await _commonMealExpenseRepository
                     .GetByCommonMealId(mealId))
                 .ToDictionary(x => x.PersonId, x => x);
 
             // Create missing expenses (each chef should have an expense record):
-            var expenses = meal.Chefs
-                .Where(x => x.PersonId != null)
-                .Select(x => x.PersonId.Value)
-                .Select(x => allExpenses.ContainsKey(x) ? allExpenses[x] : CreateDefaultExpense(x, mealId))
+            var missingExpenses = meal.Chefs
+                .Where(chef => chef.PersonId != null &&  !expenses.ContainsKey(chef.PersonId.Value))
+                .Select(chef => CreateDefaultExpense(chef.PersonId.Value, mealId))
                 .ToImmutableList();
+
+            var allExpenses = expenses.Values.Union(missingExpenses).OrderBy(x => x.PersonId).ThenBy(x => x.Id).ToImmutableList();
 
             // Create the shopping info
             var (adults, children) = await CalcMealInfo(meal.Registrations);   
@@ -55,7 +56,7 @@ namespace Cohousing.Server.Service
                 MealId = mealId,
                 Adults = adults,
                 Children = children,
-                Expenses = expenses.ToImmutableList(),
+                Expenses = allExpenses,
                 Budget = budget,
             };
         }
