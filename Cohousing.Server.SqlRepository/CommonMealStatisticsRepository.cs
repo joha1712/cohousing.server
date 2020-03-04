@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Cohousing.Server.Model;
-using Cohousing.Server.Model.Models;
 using Cohousing.Server.Model.Repositories;
-using Cohousing.Server.Util;
 using Dapper;
 // ReSharper disable RedundantAnonymousTypePropertyName
 
 namespace Cohousing.Server.SqlRepository
 {
-    public class CommonMealStatisticsRepository : ICommonMealStatisticsRepository
+  public class CommonMealStatisticsRepository : ICommonMealStatisticsRepository
     {
         private readonly ISqlRepositoryConnectionFactory _connectionFactory;
         
@@ -28,17 +25,18 @@ namespace Cohousing.Server.SqlRepository
 
             using (var connection = _connectionFactory.New())
             {
-                var result = (await connection.QueryAsync(query, new { DateFrom = fromDate, DateTo = toDate })).
+                var data = await connection.QueryAsync(query, new { DateFrom = fromDate, DateTo = toDate });
+                var result = data.
                     Select(x => new CommonMealStatisticOverview {
-                            PersonId = x.personid,
-                            ChefCount = x.chefcount,
-                            MealCount = x.mealcount,
-                            AdultGuestsCount = x.adultguestscount,
-                            ChildGuestsCount = x.childguestscount,
-                            Cost = new CommonMealStatisticCostSumOverview {
-                                ExpensesSum = Convert.ToDecimal(x.expensessum)
-                            }                        
-                    });                                   
+                        PersonId = x.personid,
+                        ChefCount = x.chefcount,
+                        MealCount = x.mealcount,
+                        AdultGuestsCount = x.adultguestscount,
+                        ChildGuestsCount = x.childguestscount,
+                        Cost = new CommonMealStatisticCostSumOverview {
+                            ExpensesSum = Convert.ToDecimal(x.expensessum)
+                        }                        
+                    });
                 return result.ToImmutableList();
             }
         }        
