@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Cohousing.Server.Model.Models;
 using Cohousing.Server.Model.Repositories;
@@ -17,16 +18,17 @@ namespace Cohousing.Server.Model.Factories
             _commonMealRegistrationFactory = commonMealRegistrationFactory;
             _commonMealChefFactory = commonMealChefFactory;
         }
-        
+
         public async Task<CommonMeal> Create(DateTime date, int numChefs)
         {
             var persons = await _personRepository.GetAll();
+            var activePersons = persons.Where(x => x.Active);
 
             return new CommonMeal
             {
                 Id = -1,
                 Date = date,
-                Registrations = _commonMealRegistrationFactory.CreateMany(persons),
+                Registrations = _commonMealRegistrationFactory.CreateMany(activePersons),
                 Chefs = _commonMealChefFactory.CreateMany(numChefs),
                 Note = null,
                 Status = "OPEN"
