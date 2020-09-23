@@ -35,11 +35,11 @@ namespace Cohousing.Server.Service
 
                 var meal = await _commonMealRepository.GetByDate(mealDate);
 
-                if (meal == null)
-                {
-                    meal = await _commonMealFactory.Create(mealDate, numChefs);
-                    await _commonMealRepository.Add(meal);
-                }
+                if (meal != null) 
+                    continue;
+                
+                meal = await _commonMealFactory.Create(mealDate, numChefs);
+                await _commonMealRepository.Add(meal);
             }
         }
 
