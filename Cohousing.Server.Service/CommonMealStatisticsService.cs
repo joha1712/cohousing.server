@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Cohousing.Server.Model;
 using Cohousing.Server.Model.Repositories;
+using Cohousing.Server.Service.Interfaces;
 using Cohousing.Server.Util;
 
 namespace Cohousing.Server.Service

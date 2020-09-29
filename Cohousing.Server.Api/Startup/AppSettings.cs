@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Cohousing.Server.Model.Repositories;
-using Cohousing.Server.Service;
+using Cohousing.Server.Service.Interfaces;
 using Cohousing.Server.Util;
 using HerokuNpgSql;
 using Microsoft.Extensions.Configuration;
+// ReSharper disable ConvertToLambdaExpression
 
 namespace Cohousing.Server.Api.Startup
 {  
@@ -17,6 +18,7 @@ namespace Cohousing.Server.Api.Startup
         private readonly Lazy<int> _cachedNumberOfChefs;
         private readonly Lazy<string> _cachedConnectionString;
         private readonly Lazy<IImmutableDictionary<string, decimal>> _cachedDinnerPrices;
+        private readonly Lazy<IImmutableDictionary<string, int>> _cachedMaxPeople;
 
         public AppSettings(IConfiguration configuration, IConfigRepository configRepository)
         {
@@ -38,6 +40,18 @@ namespace Cohousing.Server.Api.Startup
                     {
                         return Convert.ToDecimal(y.Value.Replace(",", "."), System.Globalization.CultureInfo.InvariantCulture);
                     });
+            });
+
+            _cachedMaxPeople = new Lazy<IImmutableDictionary<string, int>>(() =>
+            {
+                var config = configRepository.GetByKey("CommonMealMaxPeople");
+                if (config == null) return ImmutableDictionary.Create<string, int>();
+                
+                var valueAsKeyValuePairs = config.Value.AsKeyValuePairs();
+                return valueAsKeyValuePairs.ToImmutableDictionary(x => x.Key, y =>
+                {
+                    return y.Value == "*" ? -1 : int.Parse(y.Value);
+                });
             });
 
             _cachedDefaultDinnerDates = new Lazy<IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>>>(() =>
@@ -64,6 +78,16 @@ namespace Cohousing.Server.Api.Startup
         public int NumberOfChefs => _cachedNumberOfChefs.Value;
         
         public IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>> DefaultDinnerDates => _cachedDefaultDinnerDates.Value;
+        public int GetMaxPeople(string tag)
+        {
+            if (_cachedMaxPeople.Value.ContainsKey(tag))
+                return _cachedMaxPeople.Value[tag];
+
+            if (_cachedMaxPeople.Value.ContainsKey("*"))
+                return _cachedMaxPeople.Value["*"];
+
+            return -1;
+        }
 
         public decimal GetAdultPrice()
         {

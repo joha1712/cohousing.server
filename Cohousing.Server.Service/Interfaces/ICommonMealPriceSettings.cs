@@ -1,4 +1,4 @@
-﻿namespace Cohousing.Server.Service
+﻿namespace Cohousing.Server.Service.Interfaces
 {
     public interface ICommonMealPriceSettings {
         decimal GetAdultPrice();

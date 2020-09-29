@@ -7,6 +7,7 @@ using Cohousing.Server.Model;
 using Cohousing.Server.Model.Common;
 using Cohousing.Server.Model.Models;
 using Cohousing.Server.Model.Repositories;
+using Cohousing.Server.Service.Interfaces;
 
 
 namespace Cohousing.Server.Service

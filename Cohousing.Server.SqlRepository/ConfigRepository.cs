@@ -21,7 +21,7 @@ namespace Cohousing.Server.SqlRepository
 
             using (var connection = _connectionFactory.New())
             {
-                return connection.QuerySingle<Config>(query, new { Key = key });
+                return connection.QuerySingleOrDefault<Config>(query, new { Key = key });
             }
         }
     }

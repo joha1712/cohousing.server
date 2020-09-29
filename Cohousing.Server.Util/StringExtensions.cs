@@ -46,7 +46,7 @@ namespace Cohousing.Server.Util
         
         public static bool ContainsOrdinalIgnoreCase(this string source, string toCheck, StringComparison comp = StringComparison.OrdinalIgnoreCase)
         {
-                return source?.IndexOf(toCheck, comp) >= 0;
+            return source?.IndexOf(toCheck, comp) >= 0;
         }
         
     }
