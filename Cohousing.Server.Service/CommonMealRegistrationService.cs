@@ -29,17 +29,17 @@ namespace Cohousing.Server.Service
 
             // Prevent registration if meal is closed (the GUI tries to prevent this - but might fail)
             if (status != "OPEN")
-                throw new Exception($"The meal with id '{registration.CommonMealId}' is not open for registration updates");
+                throw new AppException(AppErrorCodes.MealIsClosed, $"The meal with id '{registration.CommonMealId}' is not open for registration updates");
 
             // Prevent registration if limit on meal size
             var maxPeople = _commonMealSettings.GetMaxPeople("STANDARD");
-            if (maxPeople > -1 && registration.Attending)
+            if (maxPeople > 0 && registration.Attending && !registration.IsTakeAway)
             {
                 var registrations = await _registrationRepository.GetByCommonMealId(registration.CommonMealId);
-                var othersAttending = registrations.Count(x => x.Attending && x.PersonId != registration.PersonId);
+                var othersAttending = registrations.Count(x => x.Attending && x.PersonId != registration.PersonId && !x.IsTakeAway);
                     
                 if (othersAttending >= maxPeople)
-                    throw new Exception($"The meal is full - maybe sign up for TAKE-AWAY instead?");
+                    throw new AppException(AppErrorCodes.MealIsFull, $"The meal is full - maybe sign up for TAKE-AWAY instead?");
             }
 
             registration.Timestamp = _timeProvider.Now();

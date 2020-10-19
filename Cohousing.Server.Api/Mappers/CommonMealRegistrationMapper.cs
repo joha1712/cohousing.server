@@ -26,6 +26,7 @@ namespace Cohousing.Server.Api.Mappers
                 Attending = item.Attending,
                 PersonId = Convert.ToInt32(item.PersonId),
                 Timestamp = DateTime.MinValue,
+                IsTakeAway = item.TakeAway,
                 Guests = _commonMealGuestRegistrationMapper.Map(item.Guests)
             };
         }
@@ -41,6 +42,7 @@ namespace Cohousing.Server.Api.Mappers
                 Attending = item.Attending,
                 PersonId = item.PersonId,
                 PersonName = person.CallName,
+                TakeAway = item.IsTakeAway,
                 Guests = _commonMealGuestRegistrationMapper.Map(item.Guests)
             };
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Cohousing.Server.Api.ExceptionHandler;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -43,7 +44,10 @@ namespace Cohousing.Server.Api.Startup
             services.AddResponseCompression();
 
             services
-                .AddMvc()
+                .AddMvc(options =>
+                {
+                    options.Filters.Add(new ApiExceptionFilter(Configuration));
+                })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(options =>
                 {
@@ -81,7 +85,7 @@ namespace Cohousing.Server.Api.Startup
             {
                 app.UseDeveloperExceptionPage();
             }
-           
+
             app.UseRequestLocalization();
             app.UseHttpsRedirection();
 

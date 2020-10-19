@@ -9,6 +9,7 @@ namespace Cohousing.Server.Model.Models
         public int CommonMealId { get; set; }
         public int PersonId { get; set; }
         public bool Attending { get; set; }
+        public bool IsTakeAway { get; set; }
         public DateTime Timestamp { get; set; }
         public CommonMealGuestRegistration Guests { get; set;}
     }
