@@ -10,13 +10,13 @@ namespace Cohousing.Server.Service
     {
         private readonly ICommonMealChefRepository _chefRepository;
         private readonly ICommonMealRepository _mealRepository;
-        private readonly ITimeProvider _timeprovider;
+        private readonly ITimeProvider _timeProvider;
 
-        public CommonMealChefService(ICommonMealChefRepository chefRepository, ICommonMealRepository mealRepository, ITimeProvider timeprovider)
+        public CommonMealChefService(ICommonMealChefRepository chefRepository, ICommonMealRepository mealRepository, ITimeProvider timeProvider)
         {
             _chefRepository = chefRepository;
             _mealRepository = mealRepository;
-            _timeprovider = timeprovider;
+            _timeProvider = timeProvider;
         }
 
         public async Task<CommonMealChef> UpdateChef(CommonMealChef chef)
@@ -26,7 +26,7 @@ namespace Cohousing.Server.Service
             if (status != "OPEN")
                 throw new Exception($"The meal with id '{chef.CommonMealId}' is not open for chef changes");
 
-            chef.Timestamp = _timeprovider.Now();
+            chef.Timestamp = _timeProvider.Now();
             return await _chefRepository.Update(chef);
         }
     }

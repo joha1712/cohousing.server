@@ -8,5 +8,7 @@ namespace Cohousing.Server.Api.Startup
     {
         int NumberOfChefs { get; }
         IImmutableList<KeyValuePair<DayOfWeek, TimeSpan>> DefaultDinnerDates { get; }
+
+        int GetMaxPeople(string tag);
     }    
 }
