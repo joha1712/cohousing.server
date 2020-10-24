@@ -38,7 +38,6 @@ deploy:
     on:
       repo: joha1712/cohousing.server
       branch: master
-
       
   - provider: heroku
     api_key: $HEROKU_TOKEN
