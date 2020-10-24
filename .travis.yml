@@ -37,7 +37,6 @@ deploy:
     app: buske-server-dev
     on:      
       branch: master
-
       
   - provider: heroku
     api_key: $HEROKU_TOKEN
