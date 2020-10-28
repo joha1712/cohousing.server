@@ -32,14 +32,20 @@ namespace Cohousing.Server.Service
                 throw new AppException(AppErrorCodes.MealIsClosed, $"The meal with id '{registration.CommonMealId}' is not open for registration updates");
 
             // Prevent registration if limit on meal size
-            var maxPeople = _commonMealSettings.GetMaxPeople("STANDARD");
-            if (maxPeople > 0 && registration.Attending && !registration.IsTakeAway)
+            var maxPeopleStandard = _commonMealSettings.GetMaxPeople("STANDARD");
+            var maxTakeAway = _commonMealSettings.GetMaxPeople("TAKEAWAY");
+
+            if (registration.Attending && (maxPeopleStandard > 0 || maxTakeAway > 0))
             {
                 var registrations = await _registrationRepository.GetByCommonMealId(registration.CommonMealId);
-                var othersAttending = registrations.Count(x => x.Attending && x.PersonId != registration.PersonId && !x.IsTakeAway);
-                    
-                if (othersAttending >= maxPeople)
+                var othersAttendingStandard = registrations.Count(x => x.Attending && x.PersonId != registration.PersonId && !x.IsTakeAway);
+                var othersAttendingTakeAway = registrations.Count(x => x.Attending && x.PersonId != registration.PersonId && x.IsTakeAway);
+                
+                if (!registration.IsTakeAway && othersAttendingStandard >= maxPeopleStandard)
                     throw new AppException(AppErrorCodes.MealIsFull, $"The meal is full - maybe sign up for TAKE-AWAY instead?");
+                
+                if (registration.IsTakeAway && othersAttendingTakeAway >= maxTakeAway)
+                    throw new AppException(AppErrorCodes.TakeAwayMealIsFull, $"The meal is full - maybe sign up for STANDARD instead?");
             }
 
             registration.Timestamp = _timeProvider.Now();
