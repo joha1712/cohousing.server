@@ -121,7 +121,7 @@ namespace Cohousing.Server.Api.Startup
                 connection["MaxPoolSize"] = 19;
                 connection.SslMode  = SslMode.Require;
                 connection["TrustServerCertificate"] = true;
-                return connection.ConnectionString; 
+                return connection.ConnectionString;
             }
                 
             // Use fallback from app config
