@@ -119,6 +119,8 @@ namespace Cohousing.Server.Api.Startup
                 connection["Pooling"] = true;
                 connection["MinPoolSize"] = 0;
                 connection["MaxPoolSize"] = 19;
+                connection.SslMode  = SslMode.Require;
+                connection.TrustServerCertificate  = true;
                 return connection.ConnectionString;
             }
                 
