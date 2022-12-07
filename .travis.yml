@@ -32,6 +32,7 @@ before_deploy:
   #- psql -d $PGSQL_CONSTR -f "$TRAVIS_BUILD_DIR/Solution Items/Install/Sql/All/03_Create_Objects.sql"
   - rvm $(travis_internal_ruby) --fuzzy do ruby -S gem install faraday -v 1.8.0
   - cd Cohousing.Server.Api/bin/Debug/netcoreapp2.1 && zip -rv9 $TRAVIS_PACKAGE_FILE . && cd .. && cd .. && cd .. & cd ..
+
 deploy:
   - provider: heroku
     api_key: $HEROKU_TOKEN
