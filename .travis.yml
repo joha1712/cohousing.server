@@ -42,6 +42,7 @@ deploy:
   - provider: heroku
     api_key: $HEROKU_TOKEN
     app: buske-server-prd
+    skip-cleanup: true
     on:      
       branch: release
   
