@@ -1,6 +1,7 @@
 language: csharp
 mono: none
 dotnet: 2.1
+
 env:
   global:
     - TRAVIS_PACKAGE_VERSION="0.1.$TRAVIS_BUILD_NUMBER"
