@@ -8,7 +8,7 @@ env:
     - HEROKU_TOKEN=$HEROKU_RELEASETOKEN
     - PGSQL_CONSTR=$POSTGRESQL_CONNECTIONSTRING
     
-# blacklist
+# blacklist 
 branches:
   except:
     - /untagged-.*/    
